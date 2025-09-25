@@ -2,8 +2,4 @@
 title: "About"
 ---
 
-About this site
-
-```{r}
-1 + 1
-```
+Hi! My name is Elene, and I'm an international student at Pomona College. I am a junior majoring in Cognitive Science, with the concentration in Computer Science and AI, and minoring in English.

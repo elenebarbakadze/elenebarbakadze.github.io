@@ -4,13 +4,34 @@
     "href": "about.html",
     "title": "About",
     "section": "",
-    "text": "About this site\n\n1 + 1\n\n[1] 2"
+    "text": "Hi! My name is Elene, and I’m an international student at Pomona College. I am a junior majoring in Cognitive Science, with the concentration in Computer Science and AI, and minoring in English."
   },
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "class-website",
+    "title": "Elene Barbakadze",
     "section": "",
-    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.\n\n1 + 1\n\n[1] 2\n\n\nHello"
+    "text": "title: “Elene Barbakadze” image: headshot copy.jpeg toc: false about: template: broadside image-shape: round image-width: 17em links: - text: LinkedIn href: https://www.linkedin.com/in/elenebarbakadze/ - text: GitHub href: https://github.com/elenebarbakadze - text: Email href: ebug2023@mymail.pomona.edu"
+  },
+  {
+    "objectID": "plot2.html",
+    "href": "plot2.html",
+    "title": "Pixar Films",
+    "section": "",
+    "text": "library(ggplot2)\nlibrary(tidytuesdayR)\ntuesdata &lt;- tidytuesdayR::tt_load(2025, week = 10)\npublic_response &lt;- tuesdata$public_response\n\n\npublic_response |&gt; \n  ggplot(aes(x = rotten_tomatoes, y = metacritic)) +\n  geom_point(na.rm = TRUE) +\n  labs(title= \"Rotten Tomatoes vs. Metacritic Scores for Pixar Movies\", \n       x = \"Rotten Tomatos score\", \n       y = \"Metacritic Score\")+\n  theme_classic()"
+  },
+  {
+    "objectID": "pixarmovies.html",
+    "href": "pixarmovies.html",
+    "title": "Pixar Films",
+    "section": "",
+    "text": "library(ggplot2)\nlibrary(tidytuesdayR)\ntuesdata &lt;- tidytuesdayR::tt_load(2025, week = 10)\npublic_response &lt;- tuesdata$public_response\n\n\npublic_response |&gt; \n  ggplot(aes(x = rotten_tomatoes, y = metacritic)) +\n  geom_point(na.rm = TRUE) +\n  labs(title= \"Rotten Tomatoes vs. Metacritic Scores for Pixar Movies\", \n       x = \"Rotten Tomatos score\", \n       y = \"Metacritic Score\")+\n  theme_classic()\n\n\n\n\n\n\n\n\nSource:"
+  },
+  {
+    "objectID": "plot1.html",
+    "href": "plot1.html",
+    "title": "Gas Prices in the US",
+    "section": "",
+    "text": "library(ggplot2)\nlibrary(tidyverse)\nlibrary(tidytuesdayR)\ntuesdata &lt;- tidytuesdayR::tt_load(2025, week = 26)\n\nweekly_gas_prices &lt;- tuesdata$weekly_gas_prices\nweekly_gas_prices &lt;-weekly_gas_prices |&gt; \n   mutate(year = year(ymd(date)))\n\n\nweekly_gas_prices |&gt; \n  ggplot(aes(x= year, y= price, color = fuel)) +\n  geom_line()+\n  labs(\n    title = \"Gas Price Trends Over Time\",\n    x = \"Year\",\n    y = \"Price (USD per gallon)\",\n    color = \"Gas Type\"\n  ) +\n  theme_minimal()\n\n\n\n\n\n\n\n\nSources:"
   }
 ]

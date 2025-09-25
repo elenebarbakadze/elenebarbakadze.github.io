@@ -1,0 +1,47 @@
+---
+title: "Gas Prices in the US"
+description: |
+  something
+author: Elene Barbakadze
+date: September 14, 2025
+format: html
+execute: 
+  warning: false
+  message: false
+---
+
+```{r}
+library(ggplot2)
+library(tidyverse)
+library(tidytuesdayR)
+tuesdata <- tidytuesdayR::tt_load(2025, week = 26)
+
+weekly_gas_prices <- tuesdata$weekly_gas_prices
+weekly_gas_prices <-weekly_gas_prices |> 
+   mutate(year = year(ymd(date)))
+
+
+weekly_gas_prices |> 
+  ggplot(aes(x= year, y= price, color = fuel)) +
+  geom_line()+
+  labs(
+    title = "Gas Price Trends Over Time",
+    x = "Year",
+    y = "Price (USD per gallon)",
+    color = "Gas Type"
+  ) +
+  theme_minimal()
+
+```
+
+Sources:
+
+---
+about:
+  template: jolla
+  links:
+    - text: TidyTuesday
+      href: https://github.com/rfordatascience/tidytuesday/tree/main
+    - text: Gas Price dataset
+      href: https://github.com/rfordatascience/tidytuesday/tree/main/data/2025/2025-07-01 
+---

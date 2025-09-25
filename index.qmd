@@ -1,13 +1,13 @@
 ---
-title: "class-website"
+title: "Elene Barbakadze"
+image: headshot copy.jpeg
+toc: false
+about: 
+  template: jolla
+  image-shape: round
+  image-width: 17em
+  links:
+    - icon: github
+      text: GitHub
+      href: https://github.com/elenebarbakadze/class-website
 ---
-
-This is a Quarto website.
-
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
-
-```{r}
-1 + 1
-```
-
-Hello

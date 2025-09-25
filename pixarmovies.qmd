@@ -1,0 +1,40 @@
+---
+title: "Pixar Films"
+description: |
+  Rotten Tomatoes vs. Metacritic Scores for Pixar Movies
+author: Elene Barbakadze
+date: September 14, 2025
+format: html
+execute: 
+  warning: false
+  message: false
+---
+
+```{r}
+library(ggplot2)
+library(tidytuesdayR)
+tuesdata <- tidytuesdayR::tt_load(2025, week = 10)
+public_response <- tuesdata$public_response
+
+
+public_response |> 
+  ggplot(aes(x = rotten_tomatoes, y = metacritic)) +
+  geom_point(na.rm = TRUE) +
+  labs(title= "Rotten Tomatoes vs. Metacritic Scores for Pixar Movies", 
+       x = "Rotten Tomatos score", 
+       y = "Metacritic Score")+
+  theme_classic()
+
+```
+
+Source:
+
+---
+about:
+  template: jolla
+  links:
+    - text: TidyTuesday
+      href: https://github.com/rfordatascience/tidytuesday/tree/main
+    - text: Gas Price dataset
+      href: https://github.com/rfordatascience/tidytuesday/tree/main/data/2025/2025-03-11
+---

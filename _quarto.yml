@@ -1,8 +1,9 @@
 project:
   type: website
-
+  output-dir: docs
+  
 website:
-  title: "class-website"
+  title: "Class website"
   navbar:
     left:
       - href: index.qmd
@@ -12,10 +13,11 @@ website:
 format:
   html:
     theme:
-      - cosmo
+      - Litera
       - brand
     css: styles.css
     toc: true
+    page-layout: full
 
 editor: visual
 

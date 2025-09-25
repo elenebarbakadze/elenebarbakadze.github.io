@@ -1,31 +1,17 @@
 [
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
-    "section": "",
-    "text": "Hi! My name is Elene, and I’m an international student at Pomona College. I am a junior majoring in Cognitive Science, with the concentration in Computer Science and AI, and minoring in English."
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Elene Barbakadze",
-    "section": "",
-    "text": "title: “Elene Barbakadze” image: headshot copy.jpeg toc: false about: template: broadside image-shape: round image-width: 17em links: - text: LinkedIn href: https://www.linkedin.com/in/elenebarbakadze/ - text: GitHub href: https://github.com/elenebarbakadze - text: Email href: ebug2023@mymail.pomona.edu"
-  },
-  {
-    "objectID": "plot2.html",
-    "href": "plot2.html",
-    "title": "Pixar Films",
-    "section": "",
-    "text": "library(ggplot2)\nlibrary(tidytuesdayR)\ntuesdata &lt;- tidytuesdayR::tt_load(2025, week = 10)\npublic_response &lt;- tuesdata$public_response\n\n\npublic_response |&gt; \n  ggplot(aes(x = rotten_tomatoes, y = metacritic)) +\n  geom_point(na.rm = TRUE) +\n  labs(title= \"Rotten Tomatoes vs. Metacritic Scores for Pixar Movies\", \n       x = \"Rotten Tomatos score\", \n       y = \"Metacritic Score\")+\n  theme_classic()"
-  },
-  {
     "objectID": "pixarmovies.html",
     "href": "pixarmovies.html",
     "title": "Pixar Films",
     "section": "",
     "text": "library(ggplot2)\nlibrary(tidytuesdayR)\ntuesdata &lt;- tidytuesdayR::tt_load(2025, week = 10)\npublic_response &lt;- tuesdata$public_response\n\n\npublic_response |&gt; \n  ggplot(aes(x = rotten_tomatoes, y = metacritic)) +\n  geom_point(na.rm = TRUE) +\n  labs(title= \"Rotten Tomatoes vs. Metacritic Scores for Pixar Movies\", \n       x = \"Rotten Tomatos score\", \n       y = \"Metacritic Score\")+\n  theme_classic()\n\n\n\n\n\n\n\n\nSource:"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "Hi! My name is Elene and I’m an international student at Pomona College. I am a junior majoring in Cognitive Science, with the concentration in Computer Science and AI, and minoring in English."
   },
   {
     "objectID": "plot1.html",

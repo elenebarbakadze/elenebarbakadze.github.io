@@ -1,12 +1,12 @@
 ---
-title: "The Rise of AI in BBC articles"
-description: _____
+title: "The Rise of AI in BBC article titles"
+description: With the recent rise of AI, it’s interesting to look at how the media has covered its development and impact over time. The following graphs explore this coverage using BBC article titles, showing when AI became a major topic of discussion and how it’s described in headlines. By tracking the frequency of AI-related terms and examining the words that follow them, the analysis highlights both the scale and tone of the conversation surrounding artificial intelligence.
 author: Elene Barbakadze
 date: October 8, 2025
 format: 
   html:
     code-fold: true
-    code-summary: "show code"
+    code-summary: "Show code"
 execute: 
   warning: false
   message: false
@@ -140,3 +140,9 @@ To explore how AI is used in context, I created two graphs showing the words tha
 The first graph shows that the most common words following *ai* are **“is,” “to,” “could,”** and **“in.”** This pattern makes sense given the normal sentence structures in article titles, where *ai* often acts as a subject followed by verbs or prepositions.
 
 The second graph focuses on words that appear after *“ai is.”* The most frequent one is **“helping”** (appearing twice), followed by single occurrences of words like **“terrifying,” “not,” “most,” “matching,” “lying,” “hateful,”** and **“being.”** It’s interesting that most of the adjectives carry a negative tone, reflecting the media narratives around AI, which emphasize fear, uncertainty, or ethical concerns over generative AI
+
+**Citation:**
+
+BBC News Articles. (n.d.). Kaggle. Retrieved October 8, 2025, from [https://www.kaggle.com/datasets/bhavikjikadara/bbc-news-articles](https://www.kaggle.com/datasets/bhavikjikadara/bbc-news-articles?utm_source=chatgpt.com)
+
+[https://www.kaggle.com/datasets/bhavikjikadara/bbc-news-articles](https://www.kaggle.com/datasets/bhavikjikadara/bbc-news-articles?utm_source=chatgpt.com): R data source

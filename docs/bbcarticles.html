@@ -8,9 +8,9 @@
 
 <meta name="author" content="Elene Barbakadze">
 <meta name="dcterms.date" content="2025-10-08">
-<meta name="description" content="_____">
+<meta name="description" content="With the recent rise of AI, it’s interesting to look at how the media has covered its development and impact over time. The following graphs explore this coverage using BBC article titles, showing when AI became a major topic of discussion and how it’s described in headlines. By tracking the frequency of AI-related terms and examining the words that follow them, the analysis highlights both the scale and tone of the conversation surrounding artificial intelligence.">
 
-<title>The Rise of AI in BBC articles – Class website</title>
+<title>The Rise of AI in BBC article titles – Class website</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -148,7 +148,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
         <li>
     <a class="dropdown-item" href="./bbcarticles.html">
- <span class="dropdown-text">BBC artciles</span></a>
+ <span class="dropdown-text">BBC articles</span></a>
   </li>  
     </ul>
   </li>
@@ -171,12 +171,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">The Rise of AI in BBC articles</h1>
+<h1 class="title">The Rise of AI in BBC article titles</h1>
 </div>
 
 <div>
   <div class="description">
-    _____
+    With the recent rise of AI, it’s interesting to look at how the media has covered its development and impact over time. The following graphs explore this coverage using BBC article titles, showing when AI became a major topic of discussion and how it’s described in headlines. By tracking the frequency of AI-related terms and examining the words that follow them, the analysis highlights both the scale and tone of the conversation surrounding artificial intelligence.
   </div>
 </div>
 
@@ -207,7 +207,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <div class="cell">
 <details class="code-fold">
-<summary>show code</summary>
+<summary>Show code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RTextTools) </span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
@@ -220,14 +220,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>For the purpose of analysis, I compiled a list of AI-related terms to make the search process easier.</p>
 <div class="cell">
 <details class="code-fold">
-<summary>show code</summary>
+<summary>Show code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>ai_terms <span class="ot">&lt;-</span> <span class="st">"(ai|artificial intelligence|machine learning|deep learning|neural network|chatgpt|openai|gpt[- ]?</span><span class="sc">\\</span><span class="st">d|large language model|llm)"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>The titles in the dataset were converted to lowercase, and all AI-related terms from the original list were replaced with the placeholder <strong>“ai”</strong> to simplify analysis. In this context, <strong>“ai”</strong> represents any term referring to artificial intelligence (e.g., <em>machine learning</em>, <em>chatgpt</em>, <em>neural networks</em>). Additionally, the publication dates were converted from character strings to date variables for easier grouping.</p>
 <div class="cell">
 <details class="code-fold">
-<summary>show code</summary>
+<summary>Show code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>articles <span class="ot">&lt;-</span> articles <span class="sc">|&gt;</span> </span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">title =</span> <span class="fu">as.character</span>(title),</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">lower_title =</span> <span class="fu">str_to_lower</span>(title),</span>
@@ -244,7 +244,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><a href="https://www.kaggle.com/datasets/bhavikjikadara/bbc-news-articles">https://www.kaggle.com/datasets/bhavikjikadara/bbc-news-article</a></p>
 <div class="cell">
 <details class="code-fold">
-<summary>show code</summary>
+<summary>Show code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>articles_month <span class="ot">&lt;-</span> articles <span class="sc">|&gt;</span> </span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(topic_ai) <span class="sc">|&gt;</span> </span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year_month)<span class="sc">|&gt;</span> </span>
@@ -271,7 +271,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <details class="code-fold">
-<summary>show code</summary>
+<summary>Show code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>year_month <span class="ot">&lt;-</span> articles <span class="sc">|&gt;</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">yr =</span> <span class="fu">year</span>(clean_date), <span class="at">mnth =</span> <span class="fu">month</span>(clean_date)) <span class="sc">|&gt;</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(yr, mnth) <span class="sc">|&gt;</span></span>
@@ -297,7 +297,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The line graph and the Heatmap show the number of BBC articles mentioning AI-related terms in their titles from May 2022 to January 2024. The data reveals an initial rise in mentions around April and May 2023, followed by a second peak in November 2023. The first surge corresponds to the public release of GPT-4 and the growing media attention surrounding generative AI tools such as ChatGPT and Microsoft Copilot. The later spike in November aligns with OpenAI’s Dev Day announcements and the coverage of the company’s leadership changes. Overall, 2023 had the highest number of AI-related articles in the dataset, indicating a significant rise of media attention.</p>
 <div class="cell">
 <details class="code-fold">
-<summary>show code</summary>
+<summary>Show code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>articles_word <span class="ot">&lt;-</span> articles <span class="sc">|&gt;</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(topic_ai) <span class="sc">|&gt;</span> </span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ai_word =</span> <span class="fu">str_extract</span>(lower_title, <span class="st">"(?&lt;=ai )</span><span class="sc">\\</span><span class="st">w+"</span>)) <span class="sc">|&gt;</span> </span>
@@ -320,7 +320,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="cell">
 <details class="code-fold">
-<summary>show code</summary>
+<summary>Show code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>articles_word <span class="sc">|&gt;</span> </span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> ai_word, <span class="at">y =</span> number_of_mentions)) <span class="sc">+</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"forestgreen"</span>) <span class="sc">+</span></span>
@@ -340,7 +340,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <details class="code-fold">
-<summary>show code</summary>
+<summary>Show code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>articles_adj <span class="sc">|&gt;</span> </span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> ai_word, <span class="at">y =</span> number_of_mentions)) <span class="sc">+</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"coral"</span>) <span class="sc">+</span></span>
@@ -363,6 +363,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>To explore how AI is used in context, I created two graphs showing the words that most frequently follow the placeholder term <strong>“ai”</strong>, and the words that follow the phrase <strong>“ai is”</strong>. I filtered the dataset to include only titles containing AI-related terms and used lookarounds to extract the surrounding words.</p>
 <p>The first graph shows that the most common words following <em>ai</em> are <strong>“is,” “to,” “could,”</strong> and <strong>“in.”</strong> This pattern makes sense given the normal sentence structures in article titles, where <em>ai</em> often acts as a subject followed by verbs or prepositions.</p>
 <p>The second graph focuses on words that appear after <em>“ai is.”</em> The most frequent one is <strong>“helping”</strong> (appearing twice), followed by single occurrences of words like <strong>“terrifying,” “not,” “most,” “matching,” “lying,” “hateful,”</strong> and <strong>“being.”</strong> It’s interesting that most of the adjectives carry a negative tone, reflecting the media narratives around AI, which emphasize fear, uncertainty, or ethical concerns over generative AI</p>
+<p><strong>Citation:</strong></p>
+<p>BBC News Articles. (n.d.). Kaggle. Retrieved October 8, 2025, from <a href="https://www.kaggle.com/datasets/bhavikjikadara/bbc-news-articles?utm_source=chatgpt.com">https://www.kaggle.com/datasets/bhavikjikadara/bbc-news-articles</a></p>
+<p><a href="https://www.kaggle.com/datasets/bhavikjikadara/bbc-news-articles?utm_source=chatgpt.com">https://www.kaggle.com/datasets/bhavikjikadara/bbc-news-articles</a>: R data source</p>
 
 
 

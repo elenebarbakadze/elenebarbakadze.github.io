@@ -4,7 +4,11 @@ description: |
   Rotten Tomatoes vs. Metacritic Scores for Pixar Movies
 author: Elene Barbakadze
 date: September 14, 2025
-format: html
+format: 
+  html:
+    code-fold: true
+    code-summary: "show code"
+editor: visual
 execute: 
   warning: false
   message: false
@@ -20,6 +24,7 @@ public_response <- tuesdata$public_response
 public_response |> 
   ggplot(aes(x = rotten_tomatoes, y = metacritic)) +
   geom_point(na.rm = TRUE) +
+  geom_smooth(method = "loess", se = FALSE, color = "black")
   labs(title= "Rotten Tomatoes vs. Metacritic Scores for Pixar Movies", 
        x = "Rotten Tomatos score", 
        y = "Metacritic Score")+
@@ -30,11 +35,9 @@ public_response |>
 Source:
 
 ---
-about:
-  template: jolla
   links:
     - text: TidyTuesday
       href: https://github.com/rfordatascience/tidytuesday/tree/main
-    - text: Gas Price dataset
+    - text: Pixar movies dataset
       href: https://github.com/rfordatascience/tidytuesday/tree/main/data/2025/2025-03-11
 ---

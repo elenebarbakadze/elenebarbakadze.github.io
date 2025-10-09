@@ -1,10 +1,12 @@
 ---
 title: "Gas Prices in the US"
-description: |
-  something
+description: The change in gas prices over the years
 author: Elene Barbakadze
 date: September 14, 2025
-format: html
+format: 
+  html:
+    code-fold: true
+    code-summary: "show code"
 execute: 
   warning: false
   message: false
@@ -23,7 +25,7 @@ weekly_gas_prices <-weekly_gas_prices |>
 
 weekly_gas_prices |> 
   ggplot(aes(x= year, y= price, color = fuel)) +
-  geom_line()+
+  geom_smooth()+
   labs(
     title = "Gas Price Trends Over Time",
     x = "Year",
@@ -37,8 +39,6 @@ weekly_gas_prices |>
 Sources:
 
 ---
-about:
-  template: jolla
   links:
     - text: TidyTuesday
       href: https://github.com/rfordatascience/tidytuesday/tree/main

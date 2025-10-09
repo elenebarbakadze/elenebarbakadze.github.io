@@ -15,16 +15,17 @@ website:
               href: plot1.html
             - text: "Pixar Films"
               href: pixarmovies.html
+            - text: "BBC artciles"
+              href: bbcarticles.html
           
 
 format:
   html:
     theme:
-      - Litera
+      - cosmo
       - brand
     css: styles.css
     toc: true
-    page-layout: full
 
 editor: visual
 

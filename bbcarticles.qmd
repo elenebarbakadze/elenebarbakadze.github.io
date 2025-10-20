@@ -46,8 +46,6 @@ articles <- articles |>
 
 ```
 
-[https://www.kaggle.com/datasets/bhavikjikadara/bbc-news-article](https://www.kaggle.com/datasets/bhavikjikadara/bbc-news-articles)
-
 ```{r}
 articles_month <- articles |> 
   filter(topic_ai) |> 

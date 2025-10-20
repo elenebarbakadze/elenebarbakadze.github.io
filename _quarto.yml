@@ -8,15 +8,16 @@ website:
     left:
       - href: index.qmd
         text: Home
-      - about.qmd
+      - href: about.qmd
+        text: Resume
       - text: "Data Viz"
         menu:
+            - text: "BBC articles"
+              href: bbcarticles.html
             - text: "Gas Price "
               href: plot1.html
             - text: "Pixar Films"
               href: pixarmovies.html
-            - text: "BBC articles"
-              href: bbcarticles.html
           
 
 format:

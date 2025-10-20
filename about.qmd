@@ -1,8 +1,6 @@
 ---
 title: "About"
 description: _______
-author: Elene Barbakadze
-date: October 7, 2025
 format: 
   html:
     code-fold: true
@@ -12,4 +10,56 @@ execute:
   message: false
 ---
 
-Hi! My name is Elene and I'm an international student at Pomona College. I am a junior majoring in Cognitive Science, with the concentration in Computer Science and AI, and minoring in English.
+Hi! My name is Elene, and I’m an international student at Pomona College, where I’m a junior majoring in Cognitive Science with a concentration in Computer Science and Artificial Intelligence, and minoring in English. My academic background combines analytical thinking, technical problem-solving, and communication skills, which together shape how I approach data, strategy, and innovation.
+
+<section>
+
+<h2>Education</h2>
+
+<p class="item">
+
+<strong>Pomona College</strong>, Claremont CA<br> B.A. Cognitive Science (CS/AI), Minor in English, GPA 3.9<br> 2023–2027
+
+</p>
+
+<p class="item">
+
+<strong> **Tbilisi Public School №199 of Physics and Mathematics**</strong>, Tbilisi<br> Math and Physics focus
+
+</p>
+
+</section>
+
+<section>
+
+<h2>Languages</h2>
+
+<ul>
+
+<li>Georgian, native</li>
+
+<li>English, fluent</li>
+
+<li>Russian, fluent</li>
+
+<li>German, proficient</li>
+
+<li>Spanish, basic</li>
+
+</ul>
+
+</section>
+
+<section>
+
+<h2>Links</h2>
+
+<ul>
+
+<li><a href="EleneBarbakadze-ResumeIB.pdf">Download PDF</a></li>
+
+<li><a href="https://github.com/elenebarbakadze" target="_blank">GitHub</a></li>
+
+</ul>
+
+</section>

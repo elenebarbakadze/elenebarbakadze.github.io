@@ -19,7 +19,10 @@ website:
             - text: "Pixar Films"
               href: pixarmovies.html
             - text: "Permutation Test"
-              href: permtest.html  
+              href: permtest.html 
+            - text: "Data Ethics"
+              href: ethics.html
+              
           
 
 format:

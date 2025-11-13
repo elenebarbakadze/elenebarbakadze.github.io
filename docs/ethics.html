@@ -7,10 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Elene Barbakadze">
-<meta name="dcterms.date" content="2025-09-14">
-<meta name="description" content="Rotten Tomatoes vs.&nbsp;Metacritic Scores for Pixar Movies">
+<meta name="dcterms.date" content="2025-11-12">
 
-<title>Pixar Films – Class website</title>
+<title>Data Ethics – Class website</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,40 +21,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -171,22 +136,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#from-data-values-and-principles-manifesto" id="toc-from-data-values-and-principles-manifesto" class="nav-link active" data-scroll-target="#from-data-values-and-principles-manifesto">From Data Values and Principles manifesto</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  <li><a href="#citations" id="toc-citations" class="nav-link" data-scroll-target="#citations">Citations</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Pixar Films</h1>
+<h1 class="title">Data Ethics</h1>
 </div>
 
-<div>
-  <div class="description">
-    <p>Rotten Tomatoes vs.&nbsp;Metacritic Scores for Pixar Movies</p>
-  </div>
-</div>
 
 
 <div class="quarto-title-meta">
@@ -201,7 +169,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 14, 2025</p>
+      <p class="date">November 12, 2025</p>
     </div>
   </div>
   
@@ -213,41 +181,69 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<div class="cell">
-<details class="code-fold">
-<summary>Show code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidytuesdayR)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>tuesdata <span class="ot">&lt;-</span> tidytuesdayR<span class="sc">::</span><span class="fu">tt_load</span>(<span class="dv">2025</span>, <span class="at">week =</span> <span class="dv">10</span>)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>public_response <span class="ot">&lt;-</span> tuesdata<span class="sc">$</span>public_response</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>public_response <span class="sc">|&gt;</span> </span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> rotten_tomatoes, <span class="at">y =</span> metacritic)) <span class="sc">+</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"loess"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">"black"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="pixarmovies_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<details class="code-fold">
-<summary>Show code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span> <span class="st">"Rotten Tomatoes vs. Metacritic Scores for Pixar Movies"</span>, </span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Rotten Tomatos score"</span>, </span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Metacritic Score"</span>)<span class="sc">+</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>NULL</code></pre>
-</div>
-</div>
-<p>Source:</p>
+<p>In 2014, Amazon started working on automating its hiring process. With larger applicant pools and cheaper data processing, the decision seemed like a no-brainer. The AI would be trained on Amazon’s hiring history – both successful and rejected resumes – and would therefore imitate the skills and qualities the hiring team valued most. It was also expected to reduce human bias and make the decision process more consistent. By giving each candidate a rating from 1 to 5, the model promised to dramatically cut down the time spent reviewing applications. This new and highly anticipated system was expected to transform the hiring process.</p>
+<p>However, in 2018, Amazon decided to scrap the model. While it did learn to evaluate candidates by skill and qualification, it also learned to rate them based on one controversial factor: gender. Because the tech industry – and Amazon’s past hires – were predominantly male, the algorithm began penalizing resumes that included words like “women’s” and favoring male-coded terms. Instead of removing bias, the system replicated and amplified it, and the model-approved candidates reflected the same biases.</p>
+<p>Because companies are not allowed to either knowingly or unwillingly discriminate based on gender, the model had to be pulled back. However, despite the initial failure, the model did have an impact on the hiring world. By 2025, 95% of Fortune 500 Companies have already integrated AI into their hiring process. But the question of transparency and bias is still as relevant as ever. In 2024, Derek Mobley filed an employment discrimination lawsuit against Workday, alleging that their algorithm-based job applicant screening system discriminated against him and other applicants based on race, age, and disability. Today, Amazon still uses AI-driven models in its hiring process, and while the company insists these systems are bias-free, the ethical questions surrounding automated hiring continue to linger.</p>
+<p>In this case, the data science component is the machine learning algorithm used to evaluate candidates based on past hiring data, while the ethical dilemma is the model’s bias and lack of transparency.</p>
+<section id="from-data-values-and-principles-manifesto" class="level3">
+<h3 class="anchored" data-anchor-id="from-data-values-and-principles-manifesto">From Data Values and Principles manifesto</h3>
+<p><em>As data teams, we aim to…</em></p>
+<ol type="1">
+<li>Principle 1 — Use data to improve life for our users, customers, organizations, and communities.</li>
+</ol>
+<p>Amazon’s statement on their AI use in hiring reads -&nbsp;</p>
+<p><em>“Over the last several years, we’ve built tools using AI and ML to help job applicants throughout the hiring process—from identifying the right position to apply for, to giving them more flexibility through online assessments that help us engage and evaluate candidates—all while driving equity and fairness in the hiring process and adhering to legal standards.”</em></p>
+<p>The testament is true for most AI tools – they are created in an effort to automate tedious, mundane jobs and eliminate human bias from decision-making. However, the outcome is drastically different from the anticipated utopia. In Amazon’s case, women were penalized for using terms that linked to their gender, such as attending all-women’s colleges or leading women’s clubs. This outcome was unintended and accidental – the workers creating the model never would have expected that the system they built would discriminate on that basis. But still, the effect is clear – the model created to eliminate human bias only contributed to upholding it. This is damaging to everyone involved – women workers are unfairly rejected, and Amazon misses out on highly qualified candidates. As an organization, Amazon is committed to upholding values of fairness and inclusivity, and models like these contradict those ideals.</p>
+<p><br>
+</p>
+<ol start="2" type="1">
+<li>Principle 7 — Recognize and mitigate bias in ourselves and in the data we use</li>
+</ol>
+<p>The backlash from the initial revelation reached far beyond the tech world. Questions about AI ethics quickly became part of everyday conversations. The failure of Amazon’s hiring model was obvious to everyone, yet the company’s response showed little reflection or accountability. When speaking with Reuters, an Amazon representative declined to comment on the model’s problems and denied that it had ever been used in candidate evaluations. The reason was clear – the model’s flaws exposed deeper issues within Amazon’s own hiring practices. Because the system was trained on company data, it revealed that Amazon’s hiring teams had historically, whether consciously or not, favored male candidates. Acknowledging this would have meant admitting to systemic bias within the company, but it would have been a necessary step toward real progress.</p>
+<p>Transparency and accountability are crucial in this process, yet Amazon failed to demonstrate either. Its current public statements do not acknowledge the model’s limitations or the ethical risks that come with relying on AI in hiring.</p>
+<p><br>
+</p>
+<ol start="3" type="1">
+<li>Principle 10 — Respect and invite fair criticism while promoting the identification and open discussion of errors, risks, and unintended consequences of our work.</li>
+</ol>
+<p>Historically, researchers and journalists have faced major barriers when trying to investigate corporate AI practices. In Sandvig v. Barr, for example, academics studying algorithmic bias argued that restrictive computer laws prevented them from testing online systems for discrimination. Amazon’s hiring model follows the same pattern. The system is not publicly available, meaning it cannot be independently audited or peer-reviewed by experts who could help identify potential flaws. Instead of encouraging open dialogue about bias, Amazon has repeatedly dismissed or avoided such conversations. By refusing to acknowledge the risks and limitations of its own tools, the company undermines both accountability and trust.&nbsp;</p>
+<p><br>
+</p>
+<ol start="4" type="1">
+<li>Principle 6: Be open to changing our methods and conclusions in response to new knowledge.</li>
+</ol>
+<p>With experimental and breakthrough work, some complications are inevitable. The same can be said for Amazon’s hiring model. While the system remains private and its training data unavailable to the public, Reuters reported that Amazon’s team had edited the model to reduce gender bias. Still, the underlying issue persists. The logic behind AI decision-making is often opaque, and identifying bias requires extensive testing and transparency. At present, it’s impossible to know what specific factors the model may use to discriminate against candidates. There are countless subtle ways for an AI to reproduce human bias – through zip codes, first and last names, student organizations, or even languages spoken.</p>
+<p>Amazon acknowledges this risk, stating:</p>
+<p><em>“As part of this process, we start with user research—diving deep to understand the context for our tools from diverse and representative perspectives and experiences. Prior to launching any new tool, we conduct studies ensuring that the tool is similarly benefiting individuals from diverse identity groups.”</em></p>
+<p>However, despite this apparent commitment to equity, it remains unclear what concrete steps the company has taken to ensure that past mistakes are not repeated.</p>
+<p><br>
+</p>
+</section>
+<section id="summary" class="level3">
+<h3 class="anchored" data-anchor-id="summary">Summary</h3>
+<p>Amazon’s hiring model highlights how easily AI systems can inherit and amplify human bias. The company’s lack of transparency and resistance to outside scrutiny reveal how easy it is for bias to remain hidden behind claims of progress. As artificial intelligence becomes a standard part of hiring practices, the consequences of these systems grow even more significant. With recent cases like the lawsuit against Workday’s AI screening system, it becomes clear that these issues are not isolated mistakes but symptoms of a larger problem. Taking them seriously is crucial, as fairness and accountability must remain at the center of technological advancement.</p>
+</section>
+<section id="citations" class="level3">
+<h3 class="anchored" data-anchor-id="citations">Citations</h3>
+<section id="main-sources" class="level4">
+<h4 class="anchored" data-anchor-id="main-sources">Main Sources</h4>
+<p>Dastin, J. (2018, October 11). <em>Insight – Amazon scraps secret AI recruiting tool that showed bias against women.</em> Reuters.<br>
+<a href="https://www.reuters.com/article/us-amazon-com-jobs-automation-insight-idUSKCN1MK08G/?utm_source=chatgpt.com">https://www.reuters.com/article/us-amazon-com-jobs-automation-insight-idUSKCN1MK08G/</a></p>
+<p>Amazon Staff. (2025, November 4). <em>How Amazon leverages AI and ML to enhance the hiring experience for candidates.</em> About Amazon.<br>
+<a href="https://www.aboutamazon.com/news/workplace/how-amazon-leverages-ai-and-ml-to-enhance-the-hiring-experience-for-candidates?utm_source=chatgpt.com">https://www.aboutamazon.com/news/workplace/how-amazon-leverages-ai-and-ml-to-enhance-the-hiring-experience-for-candidates</a></p>
+</section>
+<section id="supporting-sources" class="level4">
+<h4 class="anchored" data-anchor-id="supporting-sources">Supporting Sources</h4>
+<p>Den Houter, K. (2024, October 7). <em>AI in the workplace: Answering 3 big questions.</em> Gallup.<br>
+<a href="https://www.gallup.com/workplace/651203/workplace-answering-big-questions.aspx?utm_source=chatgpt.com">https://www.gallup.com/workplace/651203/workplace-answering-big-questions.aspx</a></p>
+<p>Gassam Asare, J. (2025, June 23). <em>What the Workday lawsuit reveals about AI bias—and how to prevent it.</em> Forbes.<br>
+<a href="https://www.forbes.com/sites/janicegassam/2025/06/23/what-the-workday-lawsuit-reveals-about-ai-bias-and-how-to-prevent-it/?utm_source=chatgpt.com">https://www.forbes.com/sites/janicegassam/2025/06/23/what-the-workday-lawsuit-reveals-about-ai-bias-and-how-to-prevent-it/</a></p>
+<p>American Civil Liberties Union. (2019, May 22). <em>Sandvig v. Barr — Challenge to CFAA prohibition on uncovering racial discrimination online.</em> ACLU.<br>
+<a href="#0">https://www.aclu.org/cases/sandvig-v-barr-challenge-cfaa-prohibition-uncovering-racial-discrimination-online</a></p>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

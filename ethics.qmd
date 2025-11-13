@@ -1,0 +1,78 @@
+---
+title: "Data Ethics"
+author: Elene Barbakadze
+date: November 12, 2025
+---
+
+In 2014, Amazon started working on automating its hiring process. With larger applicant pools and cheaper data processing, the decision seemed like a no-brainer. The AI would be trained on Amazon’s hiring history – both successful and rejected resumes – and would therefore imitate the skills and qualities the hiring team valued most. It was also expected to reduce human bias and make the decision process more consistent. By giving each candidate a rating from 1 to 5, the model promised to dramatically cut down the time spent reviewing applications. This new and highly anticipated system was expected to transform the hiring process.
+
+However, in 2018, Amazon decided to scrap the model. While it did learn to evaluate candidates by skill and qualification, it also learned to rate them based on one controversial factor: gender. Because the tech industry – and Amazon’s past hires – were predominantly male, the algorithm began penalizing resumes that included words like “women’s” and favoring male-coded terms. Instead of removing bias, the system replicated and amplified it, and the model-approved candidates reflected the same biases.
+
+Because companies are not allowed to either knowingly or unwillingly discriminate based on gender, the model had to be pulled back. However, despite the initial failure, the model did have an impact on the hiring world. By 2025, 95% of Fortune 500 Companies have already integrated AI into their hiring process. But the question of transparency and bias is still as relevant as ever. In 2024, Derek Mobley filed an employment discrimination lawsuit against Workday, alleging that their algorithm-based job applicant screening system discriminated against him and other applicants based on race, age, and disability. Today, Amazon still uses AI-driven models in its hiring process, and while the company insists these systems are bias-free, the ethical questions surrounding automated hiring continue to linger.
+
+In this case, the data science component is the machine learning algorithm used to evaluate candidates based on past hiring data, while the ethical dilemma is the model’s bias and lack of transparency.
+
+### From Data Values and Principles manifesto
+
+*As data teams, we aim to…*
+
+1.  Principle 1 — Use data to improve life for our users, customers, organizations, and communities.
+
+Amazon’s statement on their AI use in hiring reads - 
+
+*“Over the last several years, we’ve built tools using AI and ML to help job applicants throughout the hiring process—from identifying the right position to apply for, to giving them more flexibility through online assessments that help us engage and evaluate candidates—all while driving equity and fairness in the hiring process and adhering to legal standards.”*
+
+The testament is true for most AI tools – they are created in an effort to automate tedious, mundane jobs and eliminate human bias from decision-making. However, the outcome is drastically different from the anticipated utopia. In Amazon’s case, women were penalized for using terms that linked to their gender, such as attending all-women’s colleges or leading women’s clubs. This outcome was unintended and accidental – the workers creating the model never would have expected that the system they built would discriminate on that basis. But still, the effect is clear – the model created to eliminate human bias only contributed to upholding it. This is damaging to everyone involved – women workers are unfairly rejected, and Amazon misses out on highly qualified candidates. As an organization, Amazon is committed to upholding values of fairness and inclusivity, and models like these contradict those ideals.
+
+\
+
+2.  Principle 7 — Recognize and mitigate bias in ourselves and in the data we use
+
+The backlash from the initial revelation reached far beyond the tech world. Questions about AI ethics quickly became part of everyday conversations. The failure of Amazon’s hiring model was obvious to everyone, yet the company’s response showed little reflection or accountability. When speaking with Reuters, an Amazon representative declined to comment on the model’s problems and denied that it had ever been used in candidate evaluations. The reason was clear – the model’s flaws exposed deeper issues within Amazon’s own hiring practices. Because the system was trained on company data, it revealed that Amazon’s hiring teams had historically, whether consciously or not, favored male candidates. Acknowledging this would have meant admitting to systemic bias within the company, but it would have been a necessary step toward real progress.
+
+Transparency and accountability are crucial in this process, yet Amazon failed to demonstrate either. Its current public statements do not acknowledge the model’s limitations or the ethical risks that come with relying on AI in hiring.
+
+\
+
+3.  Principle 10 — Respect and invite fair criticism while promoting the identification and open discussion of errors, risks, and unintended consequences of our work.
+
+Historically, researchers and journalists have faced major barriers when trying to investigate corporate AI practices. In Sandvig v. Barr, for example, academics studying algorithmic bias argued that restrictive computer laws prevented them from testing online systems for discrimination. Amazon’s hiring model follows the same pattern. The system is not publicly available, meaning it cannot be independently audited or peer-reviewed by experts who could help identify potential flaws. Instead of encouraging open dialogue about bias, Amazon has repeatedly dismissed or avoided such conversations. By refusing to acknowledge the risks and limitations of its own tools, the company undermines both accountability and trust. 
+
+\
+
+4.  Principle 6: Be open to changing our methods and conclusions in response to new knowledge.
+
+With experimental and breakthrough work, some complications are inevitable. The same can be said for Amazon’s hiring model. While the system remains private and its training data unavailable to the public, Reuters reported that Amazon’s team had edited the model to reduce gender bias. Still, the underlying issue persists. The logic behind AI decision-making is often opaque, and identifying bias requires extensive testing and transparency. At present, it’s impossible to know what specific factors the model may use to discriminate against candidates. There are countless subtle ways for an AI to reproduce human bias – through zip codes, first and last names, student organizations, or even languages spoken.
+
+Amazon acknowledges this risk, stating:
+
+*“As part of this process, we start with user research—diving deep to understand the context for our tools from diverse and representative perspectives and experiences. Prior to launching any new tool, we conduct studies ensuring that the tool is similarly benefiting individuals from diverse identity groups.”*
+
+However, despite this apparent commitment to equity, it remains unclear what concrete steps the company has taken to ensure that past mistakes are not repeated.
+
+\
+
+### Summary
+
+Amazon’s hiring model highlights how easily AI systems can inherit and amplify human bias. The company’s lack of transparency and resistance to outside scrutiny reveal how easy it is for bias to remain hidden behind claims of progress. As artificial intelligence becomes a standard part of hiring practices, the consequences of these systems grow even more significant. With recent cases like the lawsuit against Workday’s AI screening system, it becomes clear that these issues are not isolated mistakes but symptoms of a larger problem. Taking them seriously is crucial, as fairness and accountability must remain at the center of technological advancement.
+
+### Citations
+
+#### Main Sources
+
+Dastin, J. (2018, October 11). *Insight – Amazon scraps secret AI recruiting tool that showed bias against women.* Reuters.\
+[https://www.reuters.com/article/us-amazon-com-jobs-automation-insight-idUSKCN1MK08G/](https://www.reuters.com/article/us-amazon-com-jobs-automation-insight-idUSKCN1MK08G/?utm_source=chatgpt.com)
+
+Amazon Staff. (2025, November 4). *How Amazon leverages AI and ML to enhance the hiring experience for candidates.* About Amazon.\
+[https://www.aboutamazon.com/news/workplace/how-amazon-leverages-ai-and-ml-to-enhance-the-hiring-experience-for-candidates](https://www.aboutamazon.com/news/workplace/how-amazon-leverages-ai-and-ml-to-enhance-the-hiring-experience-for-candidates?utm_source=chatgpt.com)
+
+#### Supporting Sources
+
+Den Houter, K. (2024, October 7). *AI in the workplace: Answering 3 big questions.* Gallup.\
+[https://www.gallup.com/workplace/651203/workplace-answering-big-questions.aspx](https://www.gallup.com/workplace/651203/workplace-answering-big-questions.aspx?utm_source=chatgpt.com)
+
+Gassam Asare, J. (2025, June 23). *What the Workday lawsuit reveals about AI bias—and how to prevent it.* Forbes.\
+[https://www.forbes.com/sites/janicegassam/2025/06/23/what-the-workday-lawsuit-reveals-about-ai-bias-and-how-to-prevent-it/](https://www.forbes.com/sites/janicegassam/2025/06/23/what-the-workday-lawsuit-reveals-about-ai-bias-and-how-to-prevent-it/?utm_source=chatgpt.com)
+
+American Civil Liberties Union. (2019, May 22). *Sandvig v. Barr — Challenge to CFAA prohibition on uncovering racial discrimination online.* ACLU.\
+[https://www.aclu.org/cases/sandvig-v-barr-challenge-cfaa-prohibition-uncovering-racial-discrimination-online](#0)

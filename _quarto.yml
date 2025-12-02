@@ -22,6 +22,8 @@ website:
               href: permtest.html 
             - text: "Data Ethics"
               href: ethics.html
+            - text: "SQL"
+              href: sql.html
               
           
 

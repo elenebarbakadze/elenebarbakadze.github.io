@@ -10,7 +10,9 @@ website:
         text: Home
       - href: about.qmd
         text: Resume
-      - text: "Data Viz"
+      - text: "Movie Information"
+        href: https://movieinfo.shinyapps.io/omdb_movies/
+      - text: "Data Science"
         menu:
             - text: "BBC articles"
               href: bbcarticles.html
@@ -24,8 +26,8 @@ website:
               href: ethics.html
             - text: "SQL"
               href: sql.html
-            - text: "Movie Information"
-              href: https://movieinfo.shinyapps.io/omdb_movies/
+            - text: "Final Presentation"
+              href: Presentation.qmd
           
 
 format:

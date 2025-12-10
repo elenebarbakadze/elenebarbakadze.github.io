@@ -24,7 +24,8 @@ website:
               href: ethics.html
             - text: "SQL"
               href: sql.html
-              
+            - text: "Movie Information"
+              href: https://movieinfo.shinyapps.io/omdb_movies/
           
 
 format:

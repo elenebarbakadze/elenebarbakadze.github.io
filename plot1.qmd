@@ -12,6 +12,8 @@ execute:
   message: false
 ---
 
+For this project, I decided to look at the change of price for Gas (2 types - diesel and Gasoline). The dataset is from U.S. Energy Information Administration (EIA), who updates price information weekly. The dataset includes information on the date, fuel type, grade, formulation, and price.
+
 ```{r}
 library(ggplot2)
 library(tidyverse)
@@ -22,26 +24,42 @@ weekly_gas_prices <- tuesdata$weekly_gas_prices
 weekly_gas_prices <-weekly_gas_prices |> 
    mutate(year = year(ymd(date)))
 
+head(weekly_gas_prices)
+```
+
+```{r}
+
+#| fig-cap: The weekly change in Gas price over the years from 1990 to 2025
+
+#| fig-alt: The linegraph shows years (ranging from 1990 to 2025) on the x-axis, and price per gallon USD (ranging from 0 to 4.5) on the Y axis. There are two lines, one for the gas type- diesel, and another one for the gas type - gasoline. The graph shows that the gas price for both types was steady and hovered around 1 USD untill 2000. After 2000, untill 2012, the gas price experiences dramatic increase, reaching around 3.7 USD for diesel. Gasoline follows the price of diesel untill 2016, after which it still increases, but at a lower rate than diesel. Both types get cheaper, and reach the low point around 2017 at 2.5 USD. After 2017 both types go up in price again, and in 2022 avarage price of diesel is higher than 4 USD, and price of gasoline is around 3.7 USD. After 2022, both types experience another slight price decrease. 
+
 
 weekly_gas_prices |> 
+  # X axis is the years, and the Y axis is the price per gallon. Each line represents fuel type.
   ggplot(aes(x= year, y= price, color = fuel)) +
   geom_smooth()+
+  # Labels for the axes and the legend
   labs(
     title = "Gas Price Trends Over Time",
     x = "Year",
     y = "Price (USD per gallon)",
+    caption = "Source: TidyTuesday (2025) Weekly US Gas Prices", 
     color = "Gas Type"
   ) +
   theme_minimal()
 
 ```
 
+The graph shows how gas prices have shifted over time. Both types stay fairly steady from 2000 to 2010, then jump sharply between 2010 and 2012 and again from 2017 to 2022. Prices dip a bit from 2010 to 2017 and after 2022, although they never return to their original levels. Looking at the two lines separately, gasoline remains the cheaper option, especially during the major spikes in 2022–2023.
+
 Sources:
 
----
-  links:
-    - text: TidyTuesday
-      href: https://github.com/rfordatascience/tidytuesday/tree/main
-    - text: Gas Price dataset
-      href: https://github.com/rfordatascience/tidytuesday/tree/main/data/2025/2025-07-01 
----
+R4DS Online Learning Community. “TidyTuesday.” <https://github.com/rfordatascience/tidytuesday/tree/main>.
+
+R4DS Online Learning Community. “Gas Price Dataset.” <https://github.com/rfordatascience/tidytuesday/tree/main/data/2025/2025-07-01>.
+
+Original data source citation (US gas prices)
+
+U.S. Energy Information Administration. “Weekly Retail Gasoline and Diesel Prices.” <https://www.eia.gov/petroleum/gasdiesel>.
+
+### 

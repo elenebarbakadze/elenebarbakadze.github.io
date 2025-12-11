@@ -31,106 +31,185 @@ ai_terms <- "(ai|artificial intelligence|machine learning|deep learning|neural n
 The titles in the dataset were converted to lowercase, and all AI-related terms from the original list were replaced with the placeholder **"ai"** to simplify analysis. In this context, **"ai"** represents any term referring to artificial intelligence (e.g., *machine learning*, *chatgpt*, *neural networks*). Additionally, the publication dates were converted from character strings to date variables for easier grouping.
 
 ```{r}
-
+# Clean article titles
 articles <- articles |> 
-  mutate(title = as.character(title),
+  mutate(
+    # Ensure titles are character strings
+    title = as.character(title),
+    # Convert titles to lowercase 
     lower_title = str_to_lower(title),
+    # Replace all AI-related terms with the token "ai"
     lower_title = str_replace_all(lower_title, ai_terms, "ai"),
+    # Create a variable showing whether "ai" appears or not
     topic_ai = str_detect(lower_title, "\\bai\\b"))
 
-articles <- articles |>
-  mutate(clean_date = str_replace(pubDate, "^[A-Za-z]{3},\\s*", ""),
-    clean_date = str_replace(clean_date, "\\s*GMT$", ""),
-    clean_date = dmy_hms(clean_date),
+# Convert publication dates 
+articles <- articles |> 
+  mutate(
+    # Parse publication dates into datetime format and extract the year and month
+    clean_date = dmy_hms(pubDate),
     year_month = format(clean_date, "%Y-%m"))
+```
 
+Although the dataset predominantly contains articles published between 2022 and 2024, one older article from 2013 appeared during parsing. Since it falls outside the time range of interest, it was removed for consistency. The histogram below shows the distribution of publication dates after filtering, showing the time span covered in the analysis.
+
+```{r}
+#| fig-cap: Distribution of BBC article publication dates from 2022 to 2024, showing the number of articles published over time.
+#| fig-alt: Histogram displaying the count of BBC News articles by publication date between 2022 and 2024. Bars represent how many articles were published in each time bin, illustrating overall coverage volume across the dataset. The amount of articles published is stable across the time range with no big swings.
+
+
+articles |> 
+  # Plot a histogram
+  ggplot(aes(x = clean_date)) +
+  geom_histogram(fill = "skyblue",
+    color = "white") +
+  # Make x-axis range from 2022 to 2024 in order to remove outlier article
+  scale_x_datetime(limits = c(as.POSIXct("2022-01-01"), as.POSIXct("2024-12-31"))) +
+  # Add title and axis labels
+  labs(
+    title = "Distribution of BBC Article Publication Dates",
+    x = "Publication Date",
+    y = "Count"
+  ) +
+  theme_light()
 ```
 
 ```{r}
+#| fig-cap: This plot shows how often BBC articles mentioned AI each month.
+#| fig-alt: A line graph showing the number of AI-related BBC articles published each month from 2022 to 2024. Points along the line vary in color from light yellow to dark red, with darker red indicating months with more AI mentions. The trend shows low activity in 2022, a sharp increase in mid-2023, peaks around November 2023, and fluctuating but generally lower counts through early 2024.
+
+# Create monthly counts of AI-related articles
 articles_month <- articles |> 
+  # Filter by AI mentions
   filter(topic_ai) |> 
+  # Group by month
   group_by(year_month)|> 
+  # Count numbers
   summarize(number = n()) |> 
+  # Create a clean date variable
   mutate(year_month = as.Date(paste0(year_month, "-01")))
   
+# Plot AI mentions over time
 articles_month |> 
-  ggplot(aes(x = year_month, y = number, color = number)) +
-  geom_line(size = 1.2)+
-  geom_point(color = "#FFC107", size = 2.5)+
+  ggplot(aes(x = year_month, y = number)) +
+  # Line showing trend over time
+  geom_line(color = "#FFF59D", size = 1.2)+
+  # Points colored by magnitude of AI mentions
+  geom_point(aes(color = number), size = 2.5)+
+  # Color gradient
   scale_color_gradient(low = "#FFF59D", high = "#E53935")+
+  # Add title and axis labels
   labs(title = "AI Mentions by Month",
     subtitle = "Tracking the rise of AI-related articles over time",
     x = NULL,
     y = "Number of AI Articles") +
+  # Format x-axis as months
   scale_x_date(date_labels = "%b %Y", date_breaks = "5 months") +
   theme_light()
 
+```
 
+```{r}
+#| fig-cap: Heatmap showing the number of AI-related BBC articles across months and years. Darker colors indicate months with higher frequencies of AI mentions.
+#| fig-alt: A heatmap with months on the horizontal axis and years on the vertical axis, displaying AI-related article counts using a yellow-to-red gradient. Lighter yellow tiles represent fewer mentions, while deeper orange and red tiles represent higher frequencies. The heatmap shows minimal activity in 2022, rising counts across mid-to-late 2023, and moderate but uneven activity in early 2024.
+
+# AI mentions grouped by year and month
 year_month <- articles |>
   mutate(yr = year(clean_date), mnth = month(clean_date)) |>
   group_by(yr, mnth) |>
   summarise(ai_mentions = sum(topic_ai))
 
+# Plot heatmap of AI mentions
 year_month |> 
+  # remove the outlier article
   filter(yr>2021) |> 
   mutate(mnth = factor(mnth, levels = 1:12, labels = month.abb)) |> 
   ggplot(aes(x = mnth, y = yr, fill = ai_mentions)) +
+  # Heatmap tiles
   geom_tile() +
+  # Color gradient
   scale_fill_gradient(low = "#FFF59D", high = "#E53935") +
+  # Add title and axis labels
   labs(title = "Heatmap of AI mentions by year and month", x = "Month", y = "Year", fill = "Count") +
   theme_light()
-
 ```
 
 The line graph and the Heatmap show the number of BBC articles mentioning AI-related terms in their titles from May 2022 to January 2024. The data reveals an initial rise in mentions around April and May 2023, followed by a second peak in November 2023. The first surge corresponds to the public release of GPT-4 and the growing media attention surrounding generative AI tools such as ChatGPT and Microsoft Copilot. The later spike in November aligns with OpenAI’s Dev Day announcements and the coverage of the company’s leadership changes. Overall, 2023 had the highest number of AI-related articles in the dataset, indicating a significant rise of media attention.
 
 ```{r}
+# Extract and count the most common words that appear immediately after "ai"
 articles_word <- articles |>
+  # Keep only AI-related articles
   filter(topic_ai) |> 
+  # Extract the word following "ai"
   mutate(ai_word = str_extract(lower_title, "(?<=ai )\\w+")) |> 
   filter(!is.na(ai_word)) |> 
+  # Group by the extracted word
   group_by(ai_word) |> 
+  # Count how many times each word appears
   summarize(number_of_mentions = n()) |> 
   select(ai_word, number_of_mentions) |> 
+  # Sort by most frequent words and keep top 15
   arrange(desc(number_of_mentions)) |> 
   slice_head(n = 15)
 
+# Extract and count the most common adjectives that follow "ai is"
 articles_adj <- articles |>
+   # Keep only AI-related articles and extract the word following "ai"
   filter(topic_ai) |> 
   mutate(ai_word = str_extract(lower_title, "(?<=ai is )\\w+")) |> 
   filter(!is.na(ai_word)) |> 
+  # Group by the extracted adjective
   group_by(ai_word) |> 
+  # Count how many times each word appears
   summarize(number_of_mentions = n()) |> 
   select(ai_word, number_of_mentions) |> 
+  # Sort by most frequent words
   arrange(desc(number_of_mentions))
 
   
 ```
 
 ```{r}
+#| fig-cap: Most common words appearing directly after “AI” in BBC article titles, based on the top 15 extracted terms from AI-related headlines.
+#| fig-alt: Horizontal bar chart listing the most frequent words that follow “AI” in BBC News article titles. Each bar represents a word and its count, with “is” being the most common, followed by terms like “to,” “for,” and “could.”
+
+# Bar plot
 articles_word |> 
   ggplot(aes(x = ai_word, y = number_of_mentions)) +
+  # Flip coordinates so words appear on the y-axis (more readable)
   geom_col(fill = "forestgreen") +
   coord_flip() +
+  # Ensure y-axis uses integer tick marks only
+  scale_y_continuous(breaks = scales::breaks_width(1))+
+  # Add title and axis labels
   labs(
     title = "Most Common Words Following 'AI'",
     x = NULL,
     y = "Count"
   ) +
   theme_light()
+```
 
+```{r}
+#| fig-cap: Most common words appearing after the phrase “AI is” in BBC article titles
+#| fig-alt: Horizontal bar chart showing the words that most frequently appear after the phrase “AI is” in BBC News article titles. Each bar represents the number of occurrences, with most words appearing once and “helping” appearing twice. The displayed words include “terrifying,” “not,” “most,” “matching,” “lying,” “helping,” “hateful,” and “being.”
 
+# Bar plot
 articles_adj |> 
   ggplot(aes(x = ai_word, y = number_of_mentions)) +
+  # Flip coordinates so words appear on the y-axis (more readable)
   geom_col(fill = "coral") +
   coord_flip() +
+  # Ensure y-axis uses integer tick marks only
+  scale_y_continuous(breaks = scales::breaks_width(1)) +
+  # Add title and axis labels
   labs(
     title = "Most Common Words Following 'AI is'",
     x = NULL,
     y = "Count"
   ) +
   theme_light()
-
 ```
 
 To explore how AI is used in context, I created two graphs showing the words that most frequently follow the placeholder term **"ai"**, and the words that follow the phrase **"ai is"**. I filtered the dataset to include only titles containing AI-related terms and used lookarounds to extract the surrounding words.
@@ -141,6 +220,6 @@ The second graph focuses on words that appear after *“ai is.”* The most freq
 
 **Citation:**
 
-BBC News Articles. (n.d.). Kaggle. Retrieved October 8, 2025, from [https://www.kaggle.com/datasets/bhavikjikadara/bbc-news-articles](https://www.kaggle.com/datasets/bhavikjikadara/bbc-news-articles?utm_source=chatgpt.com)
+BBC News. “BBC News Articles.” Dataset compiled from publicly available BBC News RSS feeds and APIs, covering articles published from March 2022 to July 2024. https://www.bbc.com/news.
 
-[https://www.kaggle.com/datasets/bhavikjikadara/bbc-news-articles](https://www.kaggle.com/datasets/bhavikjikadara/bbc-news-articles?utm_source=chatgpt.com): R data source
+Kikadara, Bhavik. *BBC News Articles Dataset.* Kaggle, 2024. [https://www.kaggle.com/datasets/bhavikjikadara/bbc-news-articles](https://www.kaggle.com/datasets/bhavikjikadara/bbc-news-articles?utm_source=chatgpt.com).

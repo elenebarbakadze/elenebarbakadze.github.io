@@ -183,8 +183,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#section" id="toc-section" class="nav-link active" data-scroll-target="#section"></a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -225,6 +231,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<p>For this project, I decided to look at the change of price for Gas (2 types - diesel and Gasoline). The dataset is from U.S. Energy Information Administration (EIA), who updates price information weekly. The dataset includes information on the date, fuel type, grade, formulation, and price.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Show code</summary>
@@ -237,29 +244,61 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>weekly_gas_prices <span class="ot">&lt;-</span>weekly_gas_prices <span class="sc">|&gt;</span> </span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>   <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">year</span>(<span class="fu">ymd</span>(date)))</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>weekly_gas_prices <span class="sc">|&gt;</span> </span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span> year, <span class="at">y=</span> price, <span class="at">color =</span> fuel)) <span class="sc">+</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>()<span class="sc">+</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Gas Price Trends Over Time"</span>,</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Year"</span>,</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Price (USD per gallon)"</span>,</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Gas Type"</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(weekly_gas_prices)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 6
+  date       fuel     grade   formulation  price  year
+  &lt;date&gt;     &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt;
+1 1990-08-20 gasoline regular all           1.19  1990
+2 1990-08-20 gasoline regular conventional  1.19  1990
+3 1990-08-27 gasoline regular all           1.25  1990
+4 1990-08-27 gasoline regular conventional  1.25  1990
+5 1990-09-03 gasoline regular all           1.24  1990
+6 1990-09-03 gasoline regular conventional  1.24  1990</code></pre>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: The weekly change in Gas price over the years from 1990 to 2025</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-alt: The linegraph shows years (ranging from 1990 to 2025) on the x-axis, and price per gallon USD (ranging from 0 to 4.5) on the Y axis. There are two lines, one for the gas type- diesel, and another one for the gas type - gasoline. The graph shows that the gas price for both types was steady and hovered around 1 USD untill 2000. After 2000, untill 2012, the gas price experiences dramatic increase, reaching around 3.7 USD for diesel. Gasoline follows the price of diesel untill 2016, after which it still increases, but at a lower rate than diesel. Both types get cheaper, and reach the low point around 2017 at 2.5 USD. After 2017 both types go up in price again, and in 2022 avarage price of diesel is higher than 4 USD, and price of gasoline is around 3.7 USD. After 2022, both types experience another slight price decrease. </span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>weekly_gas_prices <span class="sc">|&gt;</span> </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># X axis is the years, and the Y axis is the price per gallon. Each line represents fuel type.</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span> year, <span class="at">y=</span> price, <span class="at">color =</span> fuel)) <span class="sc">+</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>()<span class="sc">+</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Labels for the axes and the legend</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Gas Price Trends Over Time"</span>,</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Year"</span>,</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Price (USD per gallon)"</span>,</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Source: TidyTuesday (2025) Weekly US Gas Prices"</span>, </span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Gas Type"</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="plot1_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="plot1_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
+<p>The graph shows how gas prices have shifted over time. Both types stay fairly steady from 2000 to 2010, then jump sharply between 2010 and 2012 and again from 2017 to 2022. Prices dip a bit from 2010 to 2017 and after 2022, although they never return to their original levels. Looking at the two lines separately, gasoline remains the cheaper option, especially during the major spikes in 2022–2023.</p>
 <p>Sources:</p>
+<p>R4DS Online Learning Community. “TidyTuesday.” <a href="https://github.com/rfordatascience/tidytuesday/tree/main" class="uri">https://github.com/rfordatascience/tidytuesday/tree/main</a>.</p>
+<p>R4DS Online Learning Community. “Gas Price Dataset.” <a href="https://github.com/rfordatascience/tidytuesday/tree/main/data/2025/2025-07-01" class="uri">https://github.com/rfordatascience/tidytuesday/tree/main/data/2025/2025-07-01</a>.</p>
+<p>Original data source citation (US gas prices)</p>
+<p>U.S. Energy Information Administration. “Weekly Retail Gasoline and Diesel Prices.” <a href="https://www.eia.gov/petroleum/gasdiesel" class="uri">https://www.eia.gov/petroleum/gasdiesel</a>.</p>
+<section id="section" class="level3">
+<h3 class="anchored" data-anchor-id="section"></h3>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

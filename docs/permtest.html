@@ -230,8 +230,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>The dataset, Students Data Analysis, contains information on students’ graduation acceptances (did not get into the graduate school, got into a local graduate school, got into a internatinoal graduate school) and their assigned class (class), a categorical variable with two groups. Students were initially divided into two classes, but instructors suspected that students in one class might be performing significantly differently from those in the other.</p>
+<p>The dataset, Students Data Analysis, contains information on students’ graduation acceptances (did not get into the graduate school, got into a local graduate school, got into a international graduate school) and their assigned class (class), a categorical variable with two groups. Students were initially divided into two classes, but instructors suspected that students in one class might be performing significantly differently from those in the other.</p>
 <p>To test this hypothesis, I will use a permutation test to compare acceptance rates between the two classes. The procedure involved repeatedly shuffling the class labels while keeping the graduation scores fixed, then calculating the mean difference in graduation rates for each permutation. This generated a null distribution representing the differences we would expect if class assignment had no real effect on performance.</p>
+<p>IMPORTANT NOTE: The dataset used in this analysis is half-synthetic, meaning that although it was originally based on student records, the variables have been anonymized, censored, and partially generated to protect privacy. As a result, the class categories do not represent real student groups, and the patterns observed in the data may not reflect any real-world population. The analysis here should therefore be interpreted purely as a practice exercise for understanding and applying permutation tests.</p>
 <section id="hypotheses" class="level3">
 <h3 class="anchored" data-anchor-id="hypotheses">Hypotheses</h3>
 <p><strong>Null hypothesis (H₀):</strong> There is no difference in graduate school acceptance rates between the two classes. Any observed difference is due to random chance.</p>
@@ -257,36 +258,38 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details class="code-fold">
 <summary>Show code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>students_clean <span class="ot">&lt;-</span> students <span class="sc">|&gt;</span> </span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">grad =</span> <span class="fu">as.integer</span>(y<span class="sc">&gt;</span><span class="dv">0</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(class, grad) </span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>students_clean <span class="sc">|&gt;</span> </span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(class) <span class="sc">|&gt;</span> </span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">ave_grad =</span> <span class="fu">mean</span>(grad)) <span class="sc">|&gt;</span> </span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Average Grad School Acceptances by Class"</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create binary grad variable and keep class and grad columns</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>students_clean <span class="ot">&lt;-</span> students <span class="sc">|&gt;</span> </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">grad =</span> <span class="fu">as.integer</span>(y<span class="sc">&gt;</span><span class="dv">0</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(class, grad) </span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate acceptance proportion by class and display table</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>students_clean <span class="sc">|&gt;</span> </span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(class) <span class="sc">|&gt;</span> </span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">ave_grad =</span> <span class="fu">mean</span>(grad)) <span class="sc">|&gt;</span> </span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Average Grad School Acceptances by Class"</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<div id="aijavjftmp" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#aijavjftmp table {
+<div id="tjjoahgvrn" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#tjjoahgvrn table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#aijavjftmp thead, #aijavjftmp tbody, #aijavjftmp tfoot, #aijavjftmp tr, #aijavjftmp td, #aijavjftmp th {
+#tjjoahgvrn thead, #tjjoahgvrn tbody, #tjjoahgvrn tfoot, #tjjoahgvrn tr, #tjjoahgvrn td, #tjjoahgvrn th {
   border-style: none;
 }
 
-#aijavjftmp p {
+#tjjoahgvrn p {
   margin: 0;
   padding: 0;
 }
 
-#aijavjftmp .gt_table {
+#tjjoahgvrn .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -312,12 +315,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-left-color: #D3D3D3;
 }
 
-#aijavjftmp .gt_caption {
+#tjjoahgvrn .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#aijavjftmp .gt_title {
+#tjjoahgvrn .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -329,7 +332,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-width: 0;
 }
 
-#aijavjftmp .gt_subtitle {
+#tjjoahgvrn .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -341,7 +344,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-width: 0;
 }
 
-#aijavjftmp .gt_heading {
+#tjjoahgvrn .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -353,13 +356,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#aijavjftmp .gt_bottom_border {
+#tjjoahgvrn .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#aijavjftmp .gt_col_headings {
+#tjjoahgvrn .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -374,7 +377,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#aijavjftmp .gt_col_heading {
+#tjjoahgvrn .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -394,7 +397,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#aijavjftmp .gt_column_spanner_outer {
+#tjjoahgvrn .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -406,15 +409,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 4px;
 }
 
-#aijavjftmp .gt_column_spanner_outer:first-child {
+#tjjoahgvrn .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#aijavjftmp .gt_column_spanner_outer:last-child {
+#tjjoahgvrn .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#aijavjftmp .gt_column_spanner {
+#tjjoahgvrn .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -426,11 +429,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   width: 100%;
 }
 
-#aijavjftmp .gt_spanner_row {
+#tjjoahgvrn .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#aijavjftmp .gt_group_heading {
+#tjjoahgvrn .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -456,7 +459,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   text-align: left;
 }
 
-#aijavjftmp .gt_empty_group_heading {
+#tjjoahgvrn .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -471,15 +474,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: middle;
 }
 
-#aijavjftmp .gt_from_md > :first-child {
+#tjjoahgvrn .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#aijavjftmp .gt_from_md > :last-child {
+#tjjoahgvrn .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#aijavjftmp .gt_row {
+#tjjoahgvrn .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -498,7 +501,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#aijavjftmp .gt_stub {
+#tjjoahgvrn .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -511,7 +514,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#aijavjftmp .gt_stub_row_group {
+#tjjoahgvrn .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -525,15 +528,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: top;
 }
 
-#aijavjftmp .gt_row_group_first td {
+#tjjoahgvrn .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#aijavjftmp .gt_row_group_first th {
+#tjjoahgvrn .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#aijavjftmp .gt_summary_row {
+#tjjoahgvrn .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -543,16 +546,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#aijavjftmp .gt_first_summary_row {
+#tjjoahgvrn .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#aijavjftmp .gt_first_summary_row.thick {
+#tjjoahgvrn .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#aijavjftmp .gt_last_summary_row {
+#tjjoahgvrn .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -562,7 +565,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#aijavjftmp .gt_grand_summary_row {
+#tjjoahgvrn .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -572,7 +575,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#aijavjftmp .gt_first_grand_summary_row {
+#tjjoahgvrn .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -582,7 +585,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-color: #D3D3D3;
 }
 
-#aijavjftmp .gt_last_grand_summary_row_top {
+#tjjoahgvrn .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -592,11 +595,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#aijavjftmp .gt_striped {
+#tjjoahgvrn .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#aijavjftmp .gt_table_body {
+#tjjoahgvrn .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -605,7 +608,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#aijavjftmp .gt_footnotes {
+#tjjoahgvrn .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -619,7 +622,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#aijavjftmp .gt_footnote {
+#tjjoahgvrn .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -628,7 +631,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#aijavjftmp .gt_sourcenotes {
+#tjjoahgvrn .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -642,7 +645,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#aijavjftmp .gt_sourcenote {
+#tjjoahgvrn .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -650,72 +653,72 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#aijavjftmp .gt_left {
+#tjjoahgvrn .gt_left {
   text-align: left;
 }
 
-#aijavjftmp .gt_center {
+#tjjoahgvrn .gt_center {
   text-align: center;
 }
 
-#aijavjftmp .gt_right {
+#tjjoahgvrn .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#aijavjftmp .gt_font_normal {
+#tjjoahgvrn .gt_font_normal {
   font-weight: normal;
 }
 
-#aijavjftmp .gt_font_bold {
+#tjjoahgvrn .gt_font_bold {
   font-weight: bold;
 }
 
-#aijavjftmp .gt_font_italic {
+#tjjoahgvrn .gt_font_italic {
   font-style: italic;
 }
 
-#aijavjftmp .gt_super {
+#tjjoahgvrn .gt_super {
   font-size: 65%;
 }
 
-#aijavjftmp .gt_footnote_marks {
+#tjjoahgvrn .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#aijavjftmp .gt_asterisk {
+#tjjoahgvrn .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#aijavjftmp .gt_indent_1 {
+#tjjoahgvrn .gt_indent_1 {
   text-indent: 5px;
 }
 
-#aijavjftmp .gt_indent_2 {
+#tjjoahgvrn .gt_indent_2 {
   text-indent: 10px;
 }
 
-#aijavjftmp .gt_indent_3 {
+#tjjoahgvrn .gt_indent_3 {
   text-indent: 15px;
 }
 
-#aijavjftmp .gt_indent_4 {
+#tjjoahgvrn .gt_indent_4 {
   text-indent: 20px;
 }
 
-#aijavjftmp .gt_indent_5 {
+#tjjoahgvrn .gt_indent_5 {
   text-indent: 25px;
 }
 
-#aijavjftmp .katex-display {
+#tjjoahgvrn .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#aijavjftmp div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#tjjoahgvrn div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -744,35 +747,40 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </div>
 </div>
+</div>
+<div class="cell">
 <details class="code-fold">
 <summary>Show code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>students_clean <span class="sc">|&gt;</span> </span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(class) <span class="sc">|&gt;</span> </span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">ave_grad =</span> <span class="fu">mean</span>(grad)) <span class="sc">|&gt;</span> </span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">ave_diff =</span><span class="fu">diff</span>(ave_grad)) <span class="sc">|&gt;</span> </span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Differences in Grad School Acceptances Between Classes"</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute difference in acceptance proportions between the two classes</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>students_clean <span class="sc">|&gt;</span> </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(class) <span class="sc">|&gt;</span> </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># proportion accepted per class</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">ave_grad =</span> <span class="fu">mean</span>(grad)) <span class="sc">|&gt;</span> </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># difference: Class B - Class A</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">ave_diff =</span><span class="fu">diff</span>(ave_grad)) <span class="sc">|&gt;</span> </span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Differences in Grad School Acceptances Between Classes"</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<div id="poxejxwbom" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#poxejxwbom table {
+<div id="watbpaddpa" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#watbpaddpa table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#poxejxwbom thead, #poxejxwbom tbody, #poxejxwbom tfoot, #poxejxwbom tr, #poxejxwbom td, #poxejxwbom th {
+#watbpaddpa thead, #watbpaddpa tbody, #watbpaddpa tfoot, #watbpaddpa tr, #watbpaddpa td, #watbpaddpa th {
   border-style: none;
 }
 
-#poxejxwbom p {
+#watbpaddpa p {
   margin: 0;
   padding: 0;
 }
 
-#poxejxwbom .gt_table {
+#watbpaddpa .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -798,12 +806,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-left-color: #D3D3D3;
 }
 
-#poxejxwbom .gt_caption {
+#watbpaddpa .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#poxejxwbom .gt_title {
+#watbpaddpa .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -815,7 +823,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-width: 0;
 }
 
-#poxejxwbom .gt_subtitle {
+#watbpaddpa .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -827,7 +835,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-width: 0;
 }
 
-#poxejxwbom .gt_heading {
+#watbpaddpa .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -839,13 +847,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#poxejxwbom .gt_bottom_border {
+#watbpaddpa .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#poxejxwbom .gt_col_headings {
+#watbpaddpa .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -860,7 +868,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#poxejxwbom .gt_col_heading {
+#watbpaddpa .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -880,7 +888,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#poxejxwbom .gt_column_spanner_outer {
+#watbpaddpa .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -892,15 +900,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 4px;
 }
 
-#poxejxwbom .gt_column_spanner_outer:first-child {
+#watbpaddpa .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#poxejxwbom .gt_column_spanner_outer:last-child {
+#watbpaddpa .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#poxejxwbom .gt_column_spanner {
+#watbpaddpa .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -912,11 +920,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   width: 100%;
 }
 
-#poxejxwbom .gt_spanner_row {
+#watbpaddpa .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#poxejxwbom .gt_group_heading {
+#watbpaddpa .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -942,7 +950,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   text-align: left;
 }
 
-#poxejxwbom .gt_empty_group_heading {
+#watbpaddpa .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -957,15 +965,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: middle;
 }
 
-#poxejxwbom .gt_from_md > :first-child {
+#watbpaddpa .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#poxejxwbom .gt_from_md > :last-child {
+#watbpaddpa .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#poxejxwbom .gt_row {
+#watbpaddpa .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -984,7 +992,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#poxejxwbom .gt_stub {
+#watbpaddpa .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -997,7 +1005,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#poxejxwbom .gt_stub_row_group {
+#watbpaddpa .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1011,15 +1019,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: top;
 }
 
-#poxejxwbom .gt_row_group_first td {
+#watbpaddpa .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#poxejxwbom .gt_row_group_first th {
+#watbpaddpa .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#poxejxwbom .gt_summary_row {
+#watbpaddpa .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1029,16 +1037,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#poxejxwbom .gt_first_summary_row {
+#watbpaddpa .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#poxejxwbom .gt_first_summary_row.thick {
+#watbpaddpa .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#poxejxwbom .gt_last_summary_row {
+#watbpaddpa .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1048,7 +1056,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#poxejxwbom .gt_grand_summary_row {
+#watbpaddpa .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1058,7 +1066,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#poxejxwbom .gt_first_grand_summary_row {
+#watbpaddpa .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1068,7 +1076,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-color: #D3D3D3;
 }
 
-#poxejxwbom .gt_last_grand_summary_row_top {
+#watbpaddpa .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1078,11 +1086,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#poxejxwbom .gt_striped {
+#watbpaddpa .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#poxejxwbom .gt_table_body {
+#watbpaddpa .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1091,7 +1099,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#poxejxwbom .gt_footnotes {
+#watbpaddpa .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1105,7 +1113,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#poxejxwbom .gt_footnote {
+#watbpaddpa .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1114,7 +1122,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#poxejxwbom .gt_sourcenotes {
+#watbpaddpa .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1128,7 +1136,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#poxejxwbom .gt_sourcenote {
+#watbpaddpa .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1136,72 +1144,72 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#poxejxwbom .gt_left {
+#watbpaddpa .gt_left {
   text-align: left;
 }
 
-#poxejxwbom .gt_center {
+#watbpaddpa .gt_center {
   text-align: center;
 }
 
-#poxejxwbom .gt_right {
+#watbpaddpa .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#poxejxwbom .gt_font_normal {
+#watbpaddpa .gt_font_normal {
   font-weight: normal;
 }
 
-#poxejxwbom .gt_font_bold {
+#watbpaddpa .gt_font_bold {
   font-weight: bold;
 }
 
-#poxejxwbom .gt_font_italic {
+#watbpaddpa .gt_font_italic {
   font-style: italic;
 }
 
-#poxejxwbom .gt_super {
+#watbpaddpa .gt_super {
   font-size: 65%;
 }
 
-#poxejxwbom .gt_footnote_marks {
+#watbpaddpa .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#poxejxwbom .gt_asterisk {
+#watbpaddpa .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#poxejxwbom .gt_indent_1 {
+#watbpaddpa .gt_indent_1 {
   text-indent: 5px;
 }
 
-#poxejxwbom .gt_indent_2 {
+#watbpaddpa .gt_indent_2 {
   text-indent: 10px;
 }
 
-#poxejxwbom .gt_indent_3 {
+#watbpaddpa .gt_indent_3 {
   text-indent: 15px;
 }
 
-#poxejxwbom .gt_indent_4 {
+#watbpaddpa .gt_indent_4 {
   text-indent: 20px;
 }
 
-#poxejxwbom .gt_indent_5 {
+#watbpaddpa .gt_indent_5 {
   text-indent: 25px;
 }
 
-#poxejxwbom .katex-display {
+#watbpaddpa .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#poxejxwbom div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#watbpaddpa div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1226,29 +1234,65 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>From the analysis, we can see that Class A had a higher graduate school acceptance rate than Class B.</p>
+<p>Before conducting the permutation test, we can visualize the proportion of students accepted to graduate school in each class. This helps contextualize the observed difference in acceptance rates.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Show proportion (mean) of grad acceptance by class</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>students_clean <span class="sc">|&gt;</span> </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(class) <span class="sc">|&gt;</span> </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">prop_accept =</span> <span class="fu">mean</span>(grad)) <span class="sc">|&gt;</span> </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> class, <span class="at">y =</span> prop_accept, <span class="at">fill =</span> class)) <span class="sc">+</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">width =</span> <span class="fl">0.6</span>, <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">percent_format</span>()) <span class="sc">+</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Proportion of Students Accepted to Graduate School by Class"</span>,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Class"</span>,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Proportion Accepted"</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_light</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="permtest_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" alt="Bar chart comparing the proportion of students accepted to graduate school between Class A and Class B. Class A’s bar is taller, indicating approximately 51 percent acceptance, while Class B shows about 38 percent. This visual summarizes the observed difference before conducting the permutation test." width="672"></p>
+<figcaption>Proportion of students accepted to graduate school in each class.</figcaption>
+</figure>
+</div>
+</div>
+</div>
 </section>
 <section id="step-2-permutation-test-function" class="level3">
 <h3 class="anchored" data-anchor-id="step-2-permutation-test-function">Step 2: Permutation Test Function</h3>
-<p>This function tests whether the difference in average grad school accentance rates between the two classes could occur by chance. It works by shuffling the grad values, then calculating the average graduate school acceptance rate for each class in both the observed and permuted data. The function returns the difference between these averages (ave_diff and perm_diff). I set a random seed for reproducibility and used the map() function to run the function 1,000 times, combining all results into a single data frame called perm_stats.</p>
+<p>This function tests whether the difference in the <strong>proportion of students accepted to graduate school</strong> between the two classes could have occurred by chance alone. Because grad is coded as 0 or 1, the average within each class represents the <strong>proportion</strong> accepted. The test works by shuffling the grad values across students, recalculating the difference in acceptance proportions for each permutation, and comparing those values to the observed difference. This produces both the observed statistic (ave_diff) and a distribution of permuted statistics (perm_diff). I set a random seed to ensure reproducibility and used map() to repeat the permutation process 1,000 times, storing all results in a data frame called perm_stats.</p>
 <div class="cell">
 <details open="" class="code-fold">
 <summary>Show code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>grad_diff <span class="ot">&lt;-</span> <span class="cf">function</span>(rep, students_clean) {</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  students_clean <span class="sc">|&gt;</span> </span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">grad_perm =</span> <span class="fu">sample</span>(grad, <span class="at">replace =</span> <span class="cn">FALSE</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(class) <span class="sc">|&gt;</span> </span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">obs_ave =</span> <span class="fu">mean</span>(grad),</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">perm_ave =</span> <span class="fu">mean</span>(grad_perm)) <span class="sc">|&gt;</span> </span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">ave_diff =</span><span class="fu">diff</span>(obs_ave), </span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">perm_diff =</span> <span class="fu">diff</span>(perm_ave), </span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">rep =</span> rep)</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">47</span>)</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>number <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>perm_stats<span class="ot">&lt;-</span> <span class="fu">map</span>(<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>number), grad_diff, students_clean) <span class="sc">|&gt;</span> </span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list_rbind</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#a function that computes the observed and permuted differences</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>grad_diff <span class="ot">&lt;-</span> <span class="cf">function</span>(rep, students_clean) {</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  students_clean <span class="sc">|&gt;</span> </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># shuffle grad values</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">grad_perm =</span> <span class="fu">sample</span>(grad, <span class="at">replace =</span> <span class="cn">FALSE</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(class) <span class="sc">|&gt;</span> </span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>       <span class="co"># observed proportion</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">obs_ave =</span> <span class="fu">mean</span>(grad),</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>      <span class="co"># permuted proportion</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">perm_ave =</span> <span class="fu">mean</span>(grad_perm)) <span class="sc">|&gt;</span> </span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>      <span class="co"># observed difference</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">ave_diff =</span><span class="fu">diff</span>(obs_ave), </span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>      <span class="co"># permuted difference</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">perm_diff =</span> <span class="fu">diff</span>(perm_ave), </span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>      <span class="co"># iterate label</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">rep =</span> rep)</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the permutation test 1000 times</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">47</span>)</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>number <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>perm_stats<span class="ot">&lt;-</span> <span class="fu">map</span>(<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>number), grad_diff, students_clean) <span class="sc">|&gt;</span> </span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list_rbind</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
@@ -1258,26 +1302,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details class="code-fold">
 <summary>Show code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>perm_stats <span class="sc">|&gt;</span> </span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> perm_diff))<span class="sc">+</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins  =</span> <span class="dv">40</span> ,<span class="at">fill =</span> <span class="st">"skyblue"</span>, <span class="at">color =</span> <span class="st">"white"</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Permutation Distribution of Mean Differences"</span>,</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Red line = observed difference"</span>,</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Permutation Mean Difference"</span>,</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Count"</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="fu">aes</span>(<span class="at">xintercept =</span> ave_diff), <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linewidth =</span> <span class="fl">1.2</span>)<span class="sc">+</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()<span class="sc">+</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>()</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>perm_stats <span class="sc">|&gt;</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># histogram of permuted differences</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> perm_diff))<span class="sc">+</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins  =</span> <span class="dv">40</span> ,<span class="at">fill =</span> <span class="st">"skyblue"</span>, <span class="at">color =</span> <span class="st">"white"</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add title and axis labels</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Permutation Distribution of Mean Differences"</span>,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Red line = observed difference"</span>,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Permutation Mean Difference"</span>,</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Count"</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># mark observed difference</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="fu">aes</span>(<span class="at">xintercept =</span> ave_diff), <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linewidth =</span> <span class="fl">1.2</span>)<span class="sc">+</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()<span class="sc">+</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<div>
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="permtest_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="permtest_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" alt="Histogram showing the distribution of permuted differences in graduate school acceptance proportions generated from 1,000 random shuffles of the outcome variable. The values cluster around zero, as expected under the null hypothesis. A red line indicates the observed difference from the actual data, which lies within the central region of the permutation distribution, suggesting that such a difference could plausibly occur by chance." width="672"></p>
+<figcaption>Permutation distribution of the difference in graduate school acceptance proportions between the two classes.</figcaption>
 </figure>
 </div>
 </div>
@@ -1290,12 +1338,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details class="code-fold">
 <summary>Show code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>perm_stats <span class="sc">|&gt;</span> </span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">p_val_ave =</span> <span class="fu">mean</span>(perm_diff <span class="sc">&lt;</span> ave_diff)) <span class="sc">|&gt;</span> </span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Left-tailed p-value"</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the two-sided p-value:</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>perm_stats <span class="sc">|&gt;</span> </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">p_val_ave =</span> <span class="fu">mean</span>(<span class="fu">abs</span>(perm_diff) <span class="sc">&gt;=</span> <span class="fu">abs</span>(ave_diff))) <span class="sc">|&gt;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Left-tailed p-value"</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div id="mhibmslukh" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -1759,7 +1808,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </thead>
 <tbody class="gt_table_body">
 <tr class="odd">
-<td class="gt_row gt_right" headers="p_val_ave">0.085</td>
+<td class="gt_row gt_right" headers="p_val_ave">0.285</td>
 </tr>
 </tbody>
 </table>
@@ -1767,18 +1816,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+<p>Because this is a two-sided test, the p-value was computed as the proportion of permuted differences whose absolute value was greater than or equal to the absolute observed difference.</p>
 </section>
 <section id="step-5-results" class="level3">
 <h3 class="anchored" data-anchor-id="step-5-results">Step 5: Results</h3>
-<p>The results of the permutation test show that the p-value is bigger than 0.05. This means the observed difference in graduate school acceptance rates between the two classes is not statistically significant. In other words, the difference we see might have occurred by random chance, so we fail to reject the null hypothesis (H₀). Based on this analysis, there isn’t enough evidence to conclude that class assignment had a meaningful effect on graduate school acceptance outcomes.</p>
-<section id="section" class="level4">
-<h4 class="anchored" data-anchor-id="section"></h4>
-<p><strong>Citation:</strong></p>
-<p>Students Data Analysis. (n.d.). Kaggle. Retrieved October 28, 2025, from <a href="https://www.kaggle.com/datasets/erqizhou/students-data-analysis" class="uri">https://www.kaggle.com/datasets/erqizhou/students-data-analysis</a></p>
-<p><a href="https://www.kaggle.com/datasets/erqizhou/students-data-analysis" class="uri">https://www.kaggle.com/datasets/erqizhou/students-data-analysis</a>: R data source</p>
+<p>The permutation test produced a p-value greater than 0.05, meaning the observed difference in graduate school acceptance proportions between the two classes is not statistically significant. In other words, the difference we see could easily have arisen by random chance, so we fail to reject the null hypothesis (H₀). Based on this analysis, there isn’t enough evidence to conclude that class assignment meaningfully affects graduate school acceptance within this dataset.</p>
+<p><strong>Citation:</strong><br>
+</p>
+<p>Zhou, Erqi. <em>Students Data Analysis.</em> Synthetic dataset created from anonymized student records.</p>
+<p>Zhou, Erqi. <em>Students Data Analysis.</em> Kaggle, 2024. <a href="https://www.kaggle.com/datasets/erqizhou/students-data-analysis" class="uri">https://www.kaggle.com/datasets/erqizhou/students-data-analysis</a>.</p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->

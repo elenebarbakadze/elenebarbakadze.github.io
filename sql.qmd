@@ -44,17 +44,58 @@ library(dplyr)
 library(ggplot2)
 ```
 
+Before diving into the SQL analysis, it’s useful to look at the overall size of the dataset across the three cities. The bar chart below shows the total number of traffic stops recorded in Los Angeles, Austin, and Nashville. Seeing the relative scale of each dataset helps provide context for the later comparisons by race and gender, since the number of stops varies considerably from city to city.
+
+```{sql, connection = con_traffic, output.var = "stops_by_city"}
+
+# Total stops in Los Angeles
+SELECT 'Los Angeles' AS city, COUNT(*) AS num_stops
+FROM ca_los_angeles_2020_04_01
+
+UNION ALL
+
+# Total stops in Austin
+SELECT 'Austin' AS city, COUNT(*) AS num_stops
+FROM tx_austin_2020_04_01
+
+UNION ALL
+
+# Total stops in Nashville
+SELECT 'Nashville' AS city, COUNT(*) AS num_stops
+FROM tn_nashville_2020_04_01;
+
+```
+
+```{r}
+#| fig-cap: A bar chart showing total number of traffic stops recorded in Los Angeles, Austin, and Nashville.
+
+#| fig-alt: Bar chart showing the total number of traffic stops in three cities: Los Angeles has the highest count, Nashville has the second highest, and Austin has the smallest dataset.
+
+# Create a bar chart showing total stops per city
+stops_by_city |>
+  ggplot(aes(x = city, y = num_stops, fill = city)) +
+  # Titles and axis labels, remove legend
+  geom_col(show.legend = FALSE) +
+  labs(
+    title = "Total Number of Traffic Stops by City",
+    x = "City",
+    y = "Number of Stops"
+  ) +
+  theme_bw()
+```
+
 Extracting the proportions of stops in Los Angeles, Austin, and Nashville by race:
 
 ```{sql, connection=con_traffic, output.var="city_race_prop"}
 
+# Compute the number of stops for each race in each city
 SELECT
   race_count.subject_race,
   race_count.city,
   race_count.n,
   race_count.n * 1.0 / total.total AS prop
 FROM (
-
+  -- Count stops by race in Los Angeles
     SELECT 
         subject_race,
         COUNT(*) AS n,
@@ -64,6 +105,7 @@ FROM (
 
     UNION ALL
 
+    -- Count stops by race in Austin
     SELECT 
         subject_race,
         COUNT(*) AS n,
@@ -73,6 +115,7 @@ FROM (
 
     UNION ALL
 
+    -- Count stops by race in Nashville
     SELECT 
         subject_race,
         COUNT(*) AS n,
@@ -81,6 +124,8 @@ FROM (
     GROUP BY subject_race
 
 ) AS race_count
+
+-- Compute total stops per city (needed to calculate proportions)
 JOIN (
     SELECT 'Los Angeles' AS city, COUNT(*) AS total
     FROM ca_los_angeles_2020_04_01
@@ -96,8 +141,11 @@ JOIN (
     FROM tn_nashville_2020_04_01
 ) AS total
 ON race_count.city = total.city
+-- Sort
 ORDER BY race_count.city, race_count.subject_race;
 ```
+
+I used the join because the race counts and the total counts require two different levels of aggregation. The race_count subquery groups by race, while the total subquery counts all stops in each city. Joining them lets me compute n / total cleanly. Since MySQL on Posit doesn’t allow window functions in this setup, the join is the simplest valid approach.
 
 Extracting the number of stops in Austin based on gender:
 
@@ -105,6 +153,7 @@ Extracting the number of stops in Austin based on gender:
 
 -- the number of stops in austin based on gender
 
+-- Count stops by race for female subjects
 (SELECT 
     subject_race, 
     count(*) as n, 
@@ -115,6 +164,7 @@ Extracting the number of stops in Austin based on gender:
   
   UNION ALL
 
+-- Count stops by race for male subjects
 (SELECT 
     subject_race, 
     count(*) as n,
@@ -123,6 +173,7 @@ Extracting the number of stops in Austin based on gender:
   WHERE subject_sex = "male"
   GROUP BY subject_race)
   
+-- Sort
 ORDER BY subject_race, sex
 ```
 
@@ -132,6 +183,7 @@ Extracting the average number of people who were stopped in Austin by gender:
 
 -- number of stops in austin based on gender and age
 
+-- Average age by race for female subjects
 (SELECT 
     subject_race, 
     AVG(subject_age) as age, 
@@ -142,6 +194,7 @@ Extracting the average number of people who were stopped in Austin by gender:
   
   UNION ALL
 
+-- Average age by race for male subjects
 (SELECT 
     subject_race, 
     AVG(subject_age) as age,
@@ -149,9 +202,11 @@ Extracting the average number of people who were stopped in Austin by gender:
   FROM tx_austin_2020_04_01
   WHERE subject_sex = "male"
   GROUP BY subject_race)
-  
+  -- Sort
 ORDER BY subject_race, sex
 ```
+
+To compare stop rates with the underlying demographics of each city, I used racial population estimates from the 2020 U.S. Census, accessed through the CensusDots database. The Census provides city-level counts for major racial categories, which I matched to Los Angeles, Austin, and Nashville. These population values reflect the residential makeup of each city in 2020, allowing me to compare the racial distribution of stopped drivers to the racial distribution of the city’s population in the same period.
 
 Dataframe with the population distribution in Los Angeles, Austin, and Nashville:
 
@@ -193,9 +248,15 @@ population_data <- data.frame(
 ### Data Visualisation
 
 ```{r}
+#| fig-cap: Bar graph of proportion of traffic stops by race across Austin, Los Angeles, and Nashville.
+#| fig-alt: Bar chart faceted by city showing the proportion of traffic stops by race. In Austin and Nashville, white drivers make up the largest share of stops. Los Angeles shows a higher proportion of Hispanic drivers. Black drivers represent a substantial share in all three cities, especially Nashville. Asian/Pacific Islander and Other categories appear in much smaller proportions.
+
+# Plot the proportion of traffic stops by race for each city.
 city_race_prop |> 
+  filter(!is.na(subject_race), subject_race != "unknown") |> 
   ggplot(aes(x = subject_race, y = prop, fill = subject_race)) +
   geom_col() +
+  # Using facet_wrap lets us compare racial distributions across cities.
   facet_wrap(~ city) +
   theme_bw() +
   theme(
@@ -213,11 +274,16 @@ city_race_prop |>
 This graph shows the distribution of individuals stopped by the police in 3 cities – Los Angeles, Austin, and Nashville. Looking at the graph, there seems to be significant race differences – for example, in Austin and Los Angeles, it is predominately white and hispanic individuals who are stopped. In Nashville, the largest groups are white and Black individuals. However, we should be careful when it comes to arriving to conclusions from this graph. To understand the full picture, we need to compare these stop patterns to the general racial makeup of each city.
 
 ```{r}
+#| fig-cap: Population distribution by race across Austin, Los Angeles, and Nashville.
+#| fig-alt: A set of three bar charts comparing racial population distributions in Austin, Los Angeles, and Nashville. Each panel shows the proportion of residents identified as Asian or Pacific Islander, Black, Hispanic, Other, and White. Austin’s largest group is White, followed by Hispanic. Los Angeles shows a majority Hispanic population with a substantial “Other” category. Nashville has a majority White population with a notable Black population. The colors for each race category match those used in the traffic stop plot for easy comparison.
+
+ # population counts by race for each city
 population_data |> 
   ggplot(aes(x = subject_race, y = n, fill = subject_race)) +
   geom_col() +
   facet_wrap(~ city) +
   theme_bw() +
+  # Remove x-axis labels
   theme(
     axis.text.x = element_blank(),
     axis.title.x = element_blank()
@@ -233,11 +299,18 @@ population_data |>
 Once we compare the stop data to the general population, the picture gets clearer. In Austin, the racial breakdown of stopped individuals closely mirrors the city’s demographics. Los Angeles shows a different pattern, where Asian and Pacific Islander individuals appear overrepresented in stops, and people classified as “other” are underrepresented. In Nashville, the proportion of stopped Black individuals is noticeably higher than their share of the population, suggesting a potential racial bias in policing.
 
 ```{r}
+#| fig-cap: Distribution of traffic stops in Austin by race and sex.
+
+#| fig-alt: A set of two bar charts comparing traffic stops in Austin by race, split into female and male subjects. Each chart shows counts for five racial groups: Asian or Pacific Islander, Black, Hispanic, Other, and White. White individuals have the highest number of stops in both groups, followed by Hispanic and Black individuals, with Asian/Pacific Islander and Other making up much smaller proportions.
+
+# Plot number of stops in Austin by race, separated by sex
 gender_austin |> 
+  filter(!is.na(subject_race),subject_race != "unknown") |> 
   ggplot(aes(x = subject_race, y = n, fill = subject_race)) +
   geom_col() +
   facet_wrap(~ sex) +
   theme_bw() +
+  # Remove x-axis labels
   theme(
     axis.text.x = element_blank(),
     axis.title.x = element_blank()
@@ -253,11 +326,18 @@ gender_austin |>
 For the next part of the analysis, I looked at how the racial breakdown of stops changes when we split the data by gender. I focused on Austin for this comparison. Overall, the racial patterns look similar across men and women, but the total number of stops is consistently higher for men.
 
 ```{r}
+#| fig-cap: Average age of stopped individuals in Austin, separated by race and sex.
+
+#| fig-alt: A faceted bar chart showing the average age of stopped individuals in Austin. The left panel shows females and the right panel shows males. For each sex, bars represent racial groups: Asian/Pacific Islander, Black, Hispanic, Other, and White. Ages mostly fall between 34 and 40, with male subjects generally slightly older across all groups, and white males having the highest average age.
+
+# Plot average age by race, separated by sex
 gender_age_austin |> 
+  filter(!is.na(subject_race),subject_race != "unknown") |>
   ggplot(aes(x = subject_race, y = age, fill = subject_race)) +
   geom_col() +
   facet_wrap(~ sex) +
   theme_bw() +
+  # Remove x-axis labels 
   theme(
     axis.text.x = element_blank(),
     axis.title.x = element_blank()
@@ -265,9 +345,10 @@ gender_age_austin |>
   scale_fill_brewer(palette = "Paired") +
   labs(
     title = "Average Age of Stopped Individual in Austin",
-    y = "Average of a subject",
+    y = "Average Age of a subject",
     fill = "Race of Subject"
   )+
+  # Limit y-axis to 30–40
   coord_cartesian(ylim = c(30, 40))
 ```
 
@@ -278,7 +359,7 @@ I also examined the average age of stopped individuals in Austin by both race an
 Terminating SQL connection:
 
 ```{r}
-dbDisconnect(con_traffic, shutdown = TRUE)
+dbDisconnect(con_traffic)
 ```
 
 Overall, this project combined SQL wrangling, external population data, and data visualization to explore how demographic factors show up in traffic stops. The goal was to move from simple counts to a more contextual understanding by comparing stop patterns to who actually lives in each city. Focusing on Austin also showed how gender and age add another layer to these differences.

@@ -14,6 +14,8 @@ execute:
   message: false
 ---
 
+For this part, I decided to explore the connection of different ratings for the Pixar films. The dataset comes from the pixarfilms R package by Eric Leung, which compiles information primarily sourced from Wikipedia. The dataset includes details about each film’s title, Rotten Tomatoes score, Metacritic score, Cinema Score, and Critics Choice score.
+
 ```{r}
 library(ggplot2)
 library(tidytuesdayR)
@@ -21,10 +23,21 @@ tuesdata <- tidytuesdayR::tt_load(2025, week = 10)
 public_response <- tuesdata$public_response
 
 
+head(public_response)
+```
+
+```{r}
+#| fig-cap: Relationship between Rotten Tomatoes and Metacritic scores for Pixar films, with a trend line showing how higher Rotten Tomatoes ratings generally correspond to higher Metacritic scores.
+#| fig-alt: Scatterplot of Pixar films showing Rotten Tomatoes scores on the x-axis and Metacritic scores on the y-axis, along with a curved smoothing line that rises sharply at the high end of Rotten Tomatoes ratings.
+
+# Create a scatterplot comparing Rotten Tomatoes and Metacritic scores
 public_response |> 
   ggplot(aes(x = rotten_tomatoes, y = metacritic)) +
+   # Plot each movie as a point, remove rows with missing values
   geom_point(na.rm = TRUE) +
-  geom_smooth(method = "loess", se = FALSE, color = "black")
+  # Add a smooth LOESS curve to show the overall trend 
+  geom_smooth(method = "loess", se = FALSE, color = "black")+
+  # Add a title and axis labels
   labs(title= "Rotten Tomatoes vs. Metacritic Scores for Pixar Movies", 
        x = "Rotten Tomatos score", 
        y = "Metacritic Score")+
@@ -32,12 +45,14 @@ public_response |>
 
 ```
 
+The scatterplot shows a strong positive relationship between Rotten Tomatoes and Metacritic scores for Pixar films. As Rotten Tomatoes ratings increase, Metacritic scores tend to rise as well, although the pattern isn’t perfectly linear. Overall the trend suggests that Pixar movies that perform well with one rating system generally perform well with the other too.
+
 Source:
 
----
-  links:
-    - text: TidyTuesday
-      href: https://github.com/rfordatascience/tidytuesday/tree/main
-    - text: Pixar movies dataset
-      href: https://github.com/rfordatascience/tidytuesday/tree/main/data/2025/2025-03-11
----
+R4DS Online Learning Community. “TidyTuesday.” <https://github.com/rfordatascience/tidytuesday/tree/main>.
+
+R4DS Online Learning Community. “Pixar Movies Dataset.” <https://github.com/rfordatascience/tidytuesday/tree/main/data/2025/2025-03-11>.
+
+Original data source citation (Pixar)
+
+Leung, Eric. “pixarfilms R Package.” Data sourced primarily from Wikipedia. <https://github.com/erictleung/pixarfilms>.

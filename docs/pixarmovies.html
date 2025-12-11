@@ -225,6 +225,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<p>For this part, I decided to explore the connection of different ratings for the Pixar films. The dataset comes from the pixarfilms R package by Eric Leung, which compiles information primarily sourced from Wikipedia. The dataset includes details about each film’s title, Rotten Tomatoes score, Metacritic score, Cinema Score, and Critics Choice score.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Show code</summary>
@@ -234,30 +235,51 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>public_response <span class="ot">&lt;-</span> tuesdata<span class="sc">$</span>public_response</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>public_response <span class="sc">|&gt;</span> </span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> rotten_tomatoes, <span class="at">y =</span> metacritic)) <span class="sc">+</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"loess"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">"black"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(public_response)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 5
+  film            rotten_tomatoes metacritic cinema_score critics_choice
+  &lt;chr&gt;                     &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;                 &lt;dbl&gt;
+1 Toy Story                   100         95 A                        NA
+2 A Bug's Life                 92         77 A                        NA
+3 Toy Story 2                 100         88 A+                      100
+4 Monsters, Inc.               96         79 A+                       92
+5 Finding Nemo                 99         90 A+                       97
+6 The Incredibles              97         90 A+                       88</code></pre>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a scatterplot comparing Rotten Tomatoes and Metacritic scores</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>public_response <span class="sc">|&gt;</span> </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> rotten_tomatoes, <span class="at">y =</span> metacritic)) <span class="sc">+</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>   <span class="co"># Plot each movie as a point, remove rows with missing values</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add a smooth LOESS curve to show the overall trend </span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"loess"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">"black"</span>)<span class="sc">+</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add a title and axis labels</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span> <span class="st">"Rotten Tomatoes vs. Metacritic Scores for Pixar Movies"</span>, </span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Rotten Tomatos score"</span>, </span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Metacritic Score"</span>)<span class="sc">+</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<div>
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="pixarmovies_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="pixarmovies_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" alt="Scatterplot of Pixar films showing Rotten Tomatoes scores on the x-axis and Metacritic scores on the y-axis, along with a curved smoothing line that rises sharply at the high end of Rotten Tomatoes ratings." width="672"></p>
+<figcaption>Relationship between Rotten Tomatoes and Metacritic scores for Pixar films, with a trend line showing how higher Rotten Tomatoes ratings generally correspond to higher Metacritic scores.</figcaption>
 </figure>
 </div>
 </div>
-<details class="code-fold">
-<summary>Show code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span> <span class="st">"Rotten Tomatoes vs. Metacritic Scores for Pixar Movies"</span>, </span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Rotten Tomatos score"</span>, </span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Metacritic Score"</span>)<span class="sc">+</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>NULL</code></pre>
 </div>
-</div>
+<p>The scatterplot shows a strong positive relationship between Rotten Tomatoes and Metacritic scores for Pixar films. As Rotten Tomatoes ratings increase, Metacritic scores tend to rise as well, although the pattern isn’t perfectly linear. Overall the trend suggests that Pixar movies that perform well with one rating system generally perform well with the other too.</p>
 <p>Source:</p>
+<p>R4DS Online Learning Community. “TidyTuesday.” <a href="https://github.com/rfordatascience/tidytuesday/tree/main" class="uri">https://github.com/rfordatascience/tidytuesday/tree/main</a>.</p>
+<p>R4DS Online Learning Community. “Pixar Movies Dataset.” <a href="https://github.com/rfordatascience/tidytuesday/tree/main/data/2025/2025-03-11" class="uri">https://github.com/rfordatascience/tidytuesday/tree/main/data/2025/2025-03-11</a>.</p>
+<p>Original data source citation (Pixar)</p>
+<p>Leung, Eric. “pixarfilms R Package.” Data sourced primarily from Wikipedia. <a href="https://github.com/erictleung/pixarfilms" class="uri">https://github.com/erictleung/pixarfilms</a>.</p>
 
 
 
